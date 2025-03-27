@@ -50,7 +50,7 @@ HEAD_LIBFT	= $(LIBFT_DIR)/libft.h
 ALL_HEADERS	= $(HEADER) $(HEAD_LIBFT)
 
 
-SRCS 		= src/main/main.c src/init/init_env.c src/init/tokenizer.c 				\
+SRCS 		= src/main/main.c src/init/init_env.c src/init/tokenizer.c src/init/expansor.c				\
        		src/exit_and_frees/free_stuff.c 										\
        		src/init/parser.c src/init/syntax_analize.c src/init/parse_cmd.c 		\
        		src/exec/exec_cmd.c src/exec/redirections.c 							\

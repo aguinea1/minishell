@@ -115,5 +115,6 @@ void	sigint_handler(int signum);
 void	setup_signals(int signal);
 t_command	*init_command(void);
 void	add_redir_utils(t_redirection *tmp,t_command *cmd, t_redirection *redir);
+void	ft_expansor(t_token *token, t_env *env, int exit_status);
 
 #endif
