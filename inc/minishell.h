@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:58 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/25 18:15:17 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/26 15:52:30 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ char	*get_oldpwd(t_env *env);
 void	cd(char **args, t_env *env_lst);
 void	echo(char **args);
 void	ft_env(t_env *env_lst);
+void	sigint_handler(int signum);
+void	setup_signals(int signal);
 
-void	ft_export(t_token *token, t_env *env_lst);
+void	ft_export(t_token *token, t_env *env_lst, int flag);
 void	ft_unset(t_token *token, t_env *env_lst, t_env *export);
 #endif

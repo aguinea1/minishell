@@ -6,11 +6,13 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:19 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/26 11:56:14 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/26 21:13:16 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+
 static void	free_spl(char **arg)
 {
 	int i = 0;
@@ -37,7 +39,7 @@ static int	built_in(char *input, t_token *token, t_env *env_lst, t_env *export)
 	if (ft_strcmp(args[0], "env") == 0)
 		return (ft_env(env_lst), free_spl(args), 0);
 	if (ft_strcmp(args[0], "export") == 0)
-		return (free_spl(args), ft_export(token, env_lst), ft_export(token, export), 0);
+		return (free_spl(args), ft_export(token, env_lst, 0), ft_export(token, export, 1), 0);
 	if (ft_strcmp(args[0], "unset") == 0)
 		return (free_spl(args), ft_unset(token, env_lst, export), 0);
 	return (free_spl(args), 1);
@@ -54,6 +56,7 @@ void	minishell_loop(t_env *env, t_env *export)
 
 	command = NULL;
 	here.num = 0;
+	setup_signals(1);
 	while (1)
 	{
 		input = readline("\033[1;34mminishell>\033[0m ");
@@ -62,10 +65,14 @@ void	minishell_loop(t_env *env, t_env *export)
 		if (input[0])
 			add_history(input);
 		else
+		{
+			free(input);
 			continue ;
+		}
 		token = tokenizer(input, &here);
 		if (built_in(input, token, env, export) == 0)
 		{
+			free(input);
 			free_tokens(&token);
 			continue ;
 		}
@@ -79,6 +86,7 @@ void	minishell_loop(t_env *env, t_env *export)
 			command = parse_pipeline(token);
 			shell = setup_exec(command);
 			exit_status = exec_cmd(command, shell, env);
+			setup_signals(1);
 		}
 		(void)exit_status;
 		if (ft_strcmp(input, "exit") == 0)
@@ -86,6 +94,7 @@ void	minishell_loop(t_env *env, t_env *export)
 			free_tokens(&token);
 			free_commands(&command);
 			free_env(&env);
+			free_env(&export);
 			free(shell);
 			free(input);
 			break ;

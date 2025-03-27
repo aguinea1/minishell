@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:40 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/24 15:11:44 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/26 18:31:17 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,7 @@ int exe_parent(t_command *cmd, t_shell *shell)
 
 int exec_cmd(t_command *cmd, t_shell *shell, t_env *env)
 {
+	setup_signals(0);
     if (!cmd || !cmd->args)
         return 127;
     while (shell->child < shell->n_cmds)

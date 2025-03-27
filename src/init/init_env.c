@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:07:16 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/25 18:40:01 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/26 21:23:05 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_env	*init_env(char **env)
 		if (!new_node)
 			return (NULL);
 		equal_pos = ft_strcspn(env[i], "=");
-		if (equal_pos == ft_strlen(env[i])) //si no encuentra un = se lo salta y pasa al siguiente str
+		if (equal_pos == ft_strlen(env[i]))
 		{
 			free(new_node);
 			continue ;

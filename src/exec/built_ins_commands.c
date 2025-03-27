@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:38:45 by aguinea           #+#    #+#             */
-/*   Updated: 2025/03/25 18:17:03 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/27 10:24:22 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	cd(char **args, t_env *env_lst)
 			perror("cd");
 	}
 	update_env(env_lst, "OLDPWD", newpwd);
+	free(newpwd);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -140,7 +141,6 @@ void	echo(char **args)
 
 
 /////////////////////////////////////////////////////////////////////////////
-
 void	ft_env(t_env *env_lst)
 {
 	t_env	*tmp;
@@ -151,11 +151,7 @@ void	ft_env(t_env *env_lst)
 	ft_printf("%s=%s\n", env_lst->key, env_lst->value);
 	while (tmp)
 	{
-//		if (!tmp->value)
-//		{
-//			tmp = tmp->next;
-//			continue ;
-//		}
+
 		ft_printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
@@ -170,7 +166,10 @@ static void	ft_export_lonely(t_env *export)
 		return ;
 	while (tmp)
 	{
-		ft_printf("declare -x %s\n", tmp->key, tmp->value);
+		if (tmp->value[0])
+			ft_printf("declare -x %s=%s\n", tmp->key, tmp->value);
+		else
+			ft_printf("declare -x %s%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 }
@@ -186,48 +185,52 @@ static int find_key(char *args)
 	return (i + 1);
 }
 
-void	ft_export(t_token *token, t_env *export)
+void	ft_export(t_token *token, t_env *export, int flag)
 {
 	t_env	*tmp;
 	int		value_start;
 	t_env	*new_node;
-	int 	flag;
+	int 	not_new;
+	char	*is_equal;
 
 	if(!export || !token)
 		return ;
 	if (!token->next)
 	{
-		ft_export_lonely(export);
+		if (flag == 1)
+			ft_export_lonely(export);
 		return ;
 	}
 	token = token->next;
-	flag = 0;
+	not_new = 0;
 	tmp = export;
 	value_start = find_key(token->value);
+	is_equal = token->value;
 	while (tmp)
 	{
 		if (ft_strncmp(tmp->key, token->value , value_start - 1) == 0)
 		{
 			free(tmp->value);
 			tmp->value = ft_strdup(token->value + value_start);
-			flag = 1;
+			not_new = 1;
 		}
 		tmp = tmp->next;
 	}
-	if (flag == 0)
+	if (not_new == 0)
 	{
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return ;
+		if ((token->value + value_start)[0] == '\0' && flag == 0 && is_equal[value_start - 1] != '=')
+					return ;
 		new_node->key = ft_substr(token->value, 0, value_start - 1);
 		new_node->value = ft_strdup(token->value + value_start);
 		new_node->next = NULL;
 		tmp = export;
 		while (tmp->next)
-			tmp=tmp->next;
+			tmp = tmp->next;
 		tmp->next = new_node;
 	}
-
 }
 
 void	ft_unset(t_token *token, t_env *env_lst, t_env *export)
@@ -246,36 +249,44 @@ void	ft_unset(t_token *token, t_env *env_lst, t_env *export)
 		tmp = before->next;
 		if (!ft_strncmp(tmp->key, token->value, len))
 		{
-			printf("%s\n %s1\n", token->value, tmp->key);
+//			printf("%s\n %s1\n", token->value, tmp->key);
 			if (tmp->next)
+			{
 				before->next = tmp->next;
+			}
 			else
 			{
 				before->next = NULL;
-				free(tmp);
+	
 				break;
 			}
-			free(tmp);
 		}
 		before = before->next;
 	}
+	free(tmp->key);
+	free(tmp->value);
+	free(tmp);
 	before = export;
 	while (before->next)
 	{
 		tmp = before->next;
 		if (!ft_strncmp(tmp->key, token->value, len))
 		{
-			printf("%s\n %s1\n", token->value, tmp->key);
+//			printf("%s\n %s1\n", token->value, tmp->key);
 			if (tmp->next)
+			{
 				before->next = tmp->next;
+			}
 			else
 			{
 				before->next = NULL;
 				break;
 			}
-			free(tmp);
+		//	free(tmp);
 		}
 		before = before->next;
 	}
+	free(tmp->value);
+	free(tmp->key);
 	free(tmp);
 }
