@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:38:45 by aguinea           #+#    #+#             */
-/*   Updated: 2025/03/27 10:24:22 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/27 13:19:58 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ static int find_key(char *args)
 		i++;
 	return (i + 1);
 }
-
+/*
 void	ft_export(t_token *token, t_env *export, int flag)
 {
 	t_env	*tmp;
@@ -221,16 +221,86 @@ void	ft_export(t_token *token, t_env *export, int flag)
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return ;
-		if ((token->value + value_start)[0] == '\0' && flag == 0 && is_equal[value_start - 1] != '=')
+		if (ft_strdup(token->value + value_start)[0] == '\0' && flag == 0 && is_equal[value_start - 1] != '=')
 					return ;
 		new_node->key = ft_substr(token->value, 0, value_start - 1);
+		if (new_node->key == NULL)
+		{
+			free(new_node);
+			return ;
+		}
 		new_node->value = ft_strdup(token->value + value_start);
+		if (new_node->value == NULL)
+		{
+			    free(new_node->key);
+				free(new_node);
+				return ;
+		}
 		new_node->next = NULL;
 		tmp = export;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new_node;
 	}
+}*/
+void	ft_export(t_token *token, t_env *export, int flag)
+{
+	t_env	*tmp;
+	int		value_start;
+	t_env	*new_node;
+	char	*is_equal;
+	char	*temp_value;
+
+	if (!export || !token)
+		return ;
+	if (!token->next)
+	{
+		if (flag == 1)
+			ft_export_lonely(export);
+		return ;
+	}
+	token = token->next;
+	tmp = export;
+	value_start = find_key(token->value);
+	is_equal = token->value;
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->key, token->value, value_start - 1) == 0)
+		{
+			temp_value = ft_strdup(token->value + value_start);
+			if (!temp_value)
+				return ;
+			free(tmp->value);
+			tmp->value = temp_value;
+			return ;
+		}
+		tmp = tmp->next;
+	}
+
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return ;
+
+	temp_value = ft_strdup(token->value + value_start);
+	if (!temp_value && flag == 0 && is_equal[value_start - 1] != '=')
+	{
+		free(new_node);
+		return ;
+	}
+	new_node->key = ft_substr(token->value, 0, value_start - 1);
+	if (!new_node->key)
+	{
+		free(new_node);
+		free(temp_value);
+		return ;
+	}
+	new_node->value = temp_value;
+
+	new_node->next = NULL;
+	tmp = export;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new_node;
 }
 
 void	ft_unset(t_token *token, t_env *env_lst, t_env *export)
@@ -257,15 +327,15 @@ void	ft_unset(t_token *token, t_env *env_lst, t_env *export)
 			else
 			{
 				before->next = NULL;
-	
+				free(tmp->key);
+				free(tmp->value);
+				free(tmp);
 				break;
 			}
 		}
 		before = before->next;
 	}
-	free(tmp->key);
-	free(tmp->value);
-	free(tmp);
+
 	before = export;
 	while (before->next)
 	{

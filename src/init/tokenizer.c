@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 18:54:26 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/21 11:21:44 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/27 12:15:06 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	extract_word(t_token **token, char *input, int *i)
 	}
 }
 
-t_token	*tokenizer(char *input, t_heredoc *here)
+t_token	*tokenizer(char *input)
 {
 	t_token	*token;
 	int		i;
@@ -107,10 +107,7 @@ t_token	*tokenizer(char *input, t_heredoc *here)
 		else if (input[i] == '<')
 		{
 			if (input[i + 1] == '<')
-			{
 				add_token(&token, "<<", HEREDOC, &i);
-				here->num++;
-			}
 			else
 				add_token(&token, "<", REDIR_IN, &i);
 		}

@@ -6,7 +6,7 @@
 #    By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/13 20:05:41 by arcebria          #+#    #+#              #
-#    Updated: 2025/03/27 10:04:05 by aguinea          ###   ########.fr        #
+#    Updated: 2025/03/27 12:23:25 by aguinea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ SRCS 		= src/main/main.c src/init/init_env.c src/init/tokenizer.c 				\
        		src/init/parser.c src/init/syntax_analize.c src/init/parse_cmd.c 		\
        		src/exec/exec_cmd.c src/exec/redirections.c 							\
        		src/others/open_files.c src/exit_and_frees/handler_errors.c 			\
-       		src/others/utils.c src/exec/heredoc.c src/exec/built_ins_commands.c 	\
+       		src/others/utils.c  src/exec/built_ins_commands.c						\
        		src/others/signals.c
 
 OBJS 		= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)

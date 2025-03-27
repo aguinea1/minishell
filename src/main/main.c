@@ -6,12 +6,11 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:19 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/26 21:13:16 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/27 13:15:29 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
 
 static void	free_spl(char **arg)
 {
@@ -28,7 +27,7 @@ static void	free_spl(char **arg)
 static int	built_in(char *input, t_token *token, t_env *env_lst, t_env *export)
 {
 	char	**args;
-	
+
 	args = ft_split(input, ' ');
 	if (ft_strcmp(args[0], "pwd") == 0)
 		return (free_spl(args),pwd(), 0);
@@ -39,7 +38,11 @@ static int	built_in(char *input, t_token *token, t_env *env_lst, t_env *export)
 	if (ft_strcmp(args[0], "env") == 0)
 		return (ft_env(env_lst), free_spl(args), 0);
 	if (ft_strcmp(args[0], "export") == 0)
-		return (free_spl(args), ft_export(token, env_lst, 0), ft_export(token, export, 1), 0);
+	{
+		ft_export(token, export, 1);
+		ft_export(token, env_lst, 0);
+		return (free_spl(args), 0);
+	}
 	if (ft_strcmp(args[0], "unset") == 0)
 		return (free_spl(args), ft_unset(token, env_lst, export), 0);
 	return (free_spl(args), 1);
@@ -51,11 +54,10 @@ void	minishell_loop(t_env *env, t_env *export)
 	t_token		*token;
 	t_command	*command;
 	t_shell		*shell;
-	t_heredoc	here;
-	int			exit_status;
+	int	exit_status;
 
+	exit_status = 1;
 	command = NULL;
-	here.num = 0;
 	setup_signals(1);
 	while (1)
 	{
@@ -69,17 +71,12 @@ void	minishell_loop(t_env *env, t_env *export)
 			free(input);
 			continue ;
 		}
-		token = tokenizer(input, &here);
+		token = tokenizer(input);
 		if (built_in(input, token, env, export) == 0)
 		{
 			free(input);
 			free_tokens(&token);
 			continue ;
-		}
-		if (here.num > 0)
-		{
-			here_loop(&here, token);
-			here.num = 0;
 		}
 		if (syntax_analize(token) == 0)
 		{
@@ -88,12 +85,19 @@ void	minishell_loop(t_env *env, t_env *export)
 			exit_status = exec_cmd(command, shell, env);
 			setup_signals(1);
 		}
-		(void)exit_status;
+		else
+		{
+			free(input);
+			free_tokens(&token);
+			continue ;
+		}
+		//(void)exit_status;
+		printf("%d\n", exit_status);
 		if (ft_strcmp(input, "exit") == 0)
 		{
 			free_tokens(&token);
 			free_commands(&command);
-			free_env(&env);
+			free_env(&env);	
 			free_env(&export);
 			free(shell);
 			free(input);
@@ -103,11 +107,9 @@ void	minishell_loop(t_env *env, t_env *export)
 		free_commands(&command);
 		free(shell);
 		free(input);
-		unlink("/tmp/heredoc_tmp");
 	}
-	rl_clear_history();
-	unlink("/tmp/heredoc_tmp");
 	free_env(&env);
+	rl_clear_history();
 	free_env(&export);
 }
 

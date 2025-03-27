@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:58 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/26 15:52:30 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/27 13:12:24 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,10 @@ typedef struct s_shell
 	int		*pipes;
 	pid_t	*pids;
 	int		child;
+	int		flag_in;
+	int		flag_out;
+	int		here_doc;
 }	t_shell;
-typedef struct	s_heredoc
-{
-	int		num;
-}	t_heredoc;
 
 typedef struct s_token
 {
@@ -63,6 +62,7 @@ typedef struct s_redirection
 	char					*file;
 	int						fd_in;
 	int						fd_out;
+	char					*hd_filename;
 	struct s_redirection	*next;
 }	t_redirection;
 
@@ -82,26 +82,17 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_exp
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_exp;
-
-t_token		*tokenizer(char *input, t_heredoc *here);
+t_token		*tokenizer(char *input);
 void		free_tokens(t_token **token);
 t_command	*parse_pipeline(t_token	*token);
 int			syntax_analize(t_token *tokens);
 void		free_commands(t_command	**cmds);
-void		free_redir(t_redirection **redir);
+void		free_tokens(t_token **token);
 void		free_env(t_env **env);
 void		get_cmd(t_command *cmd, t_env *env);
 //void	echo(char **args);
 //void	cd(char **args, t_env *env_lst);
 //void	pwd(void);
-t_command	*init_command(void);
-void	add_redir_utils(t_redirection *tmp,t_command *cmd, t_redirection *redir);
 t_env		*init_env(char **env);
 int			exec_cmd(t_command *cmd, t_shell *shell, t_env *env);
 t_shell		*setup_exec(t_command *cmd);
@@ -109,9 +100,9 @@ int			cmd_size(t_command *cmd);
 int			redir_first_child(t_redirection *redir, t_shell *shell);
 int			redir_last_child(t_redirection *redir, t_shell *shell);
 int			redir_n_child(t_redirection *redir, t_shell *shell);
-int	err_out(char *str1, char *str2, char *str3, char *str4, int err_no);
-void	add_redir_utils(t_redirection *tmp,t_command *cmd, t_redirection *redir);
-int here_loop(t_heredoc *doc, t_token *token);
+void		err_out(char *str1, char *str2, char *str3, char *str4);
+void	ft_export(t_token *token, t_env *env_lst, int flag);
+void	ft_unset(t_token *token, t_env *env_lst, t_env *export);
 void	pwd(void);
 void	cd_home(char *home);
 void	cd_oldpwd(char *oldpwd);
@@ -122,7 +113,7 @@ void	echo(char **args);
 void	ft_env(t_env *env_lst);
 void	sigint_handler(int signum);
 void	setup_signals(int signal);
+t_command	*init_command(void);
+void	add_redir_utils(t_redirection *tmp,t_command *cmd, t_redirection *redir);
 
-void	ft_export(t_token *token, t_env *env_lst, int flag);
-void	ft_unset(t_token *token, t_env *env_lst, t_env *export);
 #endif
