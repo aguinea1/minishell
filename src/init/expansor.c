@@ -6,23 +6,41 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:07:16 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/27 13:29:34 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/03/27 19:34:06 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	find_env(char *token_str, t_env *env)
+static 	char *find_env(char *token_str, t_env *env, t_token *token)
 {
-	t_env *tmp;
+	int		len;
+	char	*expanded;
+	char	*statik;
+	int		i;
 
-	tmp = env;
-	while (tmp)
+	len = 0;
+	expanded = NULL;
+	i = 0;
+	while (token->value[len] && token->value[len] != '$')
+		len ++;
+	statik = (char *)malloc(sizeof(char) * (len + 1));
+	statik[len] = '\0';
+	while (i < len)
 	{
-		if(!ft_strcmp(token_str, tmp->key))
-			ft_printf("%s", tmp->value);
-		tmp = tmp->next;
+		statik[i] = token->value[i];
+		i++;
 	}
+	while (env)
+	{	
+		if (!strcmp(token_str, env->key))
+			expanded = env->value;
+		env = env->next;
+	}
+	free(token->value);
+	token->value = ft_strjoin(statik, expanded);
+	free(statik);
+	return (token->value);
 }
 
 static void	print_exit_status(char *token_str, int exit_status)
@@ -48,23 +66,27 @@ static void	print_exit_status(char *token_str, int exit_status)
 void	ft_expansor(t_token *token, t_env *env, int exit_status)
 {
 	char	*token_str;
+	t_token	*tmp;
 	int		i;
 
-	while (token)
+	tmp = token;
+	while (tmp)
 	{
-		token_str = token->value;
+		token_str = tmp->value;
 		i = 0;
 		while (token_str[i])
 		{
 			if(token_str[i] == '$')
 			{
 				if (token_str[i + 1] == '?')
-						print_exit_status(token_str, exit_status);
+					print_exit_status(token_str, exit_status);
 				else
-					find_env(token_str + i + 1, env);
+				{
+					token_str = find_env(token_str + i + 1, env, tmp);
+				}
 			}
 			i++;
 		}
-		token = token->next;
+		tmp = tmp->next;
 	}
 }

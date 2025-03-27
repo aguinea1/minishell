@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:19 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/27 13:15:29 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/27 16:12:25 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	minishell_loop(t_env *env, t_env *export)
 			continue ;
 		}
 		token = tokenizer(input);
+		ft_expansor(token, env, exit_status);
 		if (built_in(input, token, env, export) == 0)
 		{
 			free(input);
@@ -91,8 +92,6 @@ void	minishell_loop(t_env *env, t_env *export)
 			free_tokens(&token);
 			continue ;
 		}
-		//(void)exit_status;
-		printf("%d\n", exit_status);
 		if (ft_strcmp(input, "exit") == 0)
 		{
 			free_tokens(&token);
