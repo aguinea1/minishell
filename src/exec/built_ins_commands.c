@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:38:45 by aguinea           #+#    #+#             */
-/*   Updated: 2025/03/31 11:45:52 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/03/31 12:39:16 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,8 +284,10 @@ void	ft_export(t_token *token, t_env *export, int flag)
 		return ;
 
 	temp_value = ft_strdup(token->value + value_start);
-	if (!temp_value && flag == 0 && is_equal[value_start - 1] != '=')
+	printf("%s %d\n%s\n", is_equal, value_start, temp_value);
+	if (/*?temp_value? &&*/ flag == 0 && is_equal[value_start -1 ]  != '=')
 	{
+		printf("1\n");
 		free(new_node);
 		return ;
 	}
