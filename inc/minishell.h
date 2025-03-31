@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:58 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/27 13:12:24 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/31 09:35:43 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ void	cd_home(char *home);
 void	cd_oldpwd(char *oldpwd);
 void	update_env(t_env *env_lst, char *key, char *new_value);
 char	*get_oldpwd(t_env *env);
-void	cd(char **args, t_env *env_lst);
-void	echo(char **args);
+void	cd(char **args, t_env *env_lst, t_token *token);
+void	echo(char **args, t_token *token);
 void	ft_env(t_env *env_lst);
 void	sigint_handler(int signum);
 void	setup_signals(int signal);

@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:19 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/27 16:12:25 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/03/31 09:35:13 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ static int	built_in(char *input, t_token *token, t_env *env_lst, t_env *export)
 	if (ft_strcmp(args[0], "pwd") == 0)
 		return (free_spl(args),pwd(), 0);
 	if (ft_strcmp(args[0], "cd") == 0)
-		return (cd(args, env_lst), free_spl(args), 0);
+		return (cd(args, env_lst, token), free_spl(args), 0);
 	if (ft_strcmp(args[0], "echo") == 0)
-		return (echo(args), free_spl(args), 0);
+		return (echo(args, token), free_spl(args), 0);
 	if (ft_strcmp(args[0], "env") == 0)
 		return (ft_env(env_lst), free_spl(args), 0);
 	if (ft_strcmp(args[0], "export") == 0)

@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:38:45 by aguinea           #+#    #+#             */
-/*   Updated: 2025/03/27 13:19:58 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/03/31 11:45:52 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	*get_oldpwd(t_env *env)
 	return (NULL);
 }
 
-void	cd(char **args, t_env *env_lst)
+void	cd(char **args, t_env *env_lst, t_token *token)
 {
 	char	*home;
 	char	*oldpwd;
@@ -102,16 +102,17 @@ void	cd(char **args, t_env *env_lst)
 		cd_oldpwd(oldpwd);
 	else
 	{
-		if (chdir(args[1]) != 0)
+		if (chdir(args[1]) == 0 || chdir(token->next->value) == 0)
+			;
+		else
 			perror("cd");
 	}
 	update_env(env_lst, "OLDPWD", newpwd);
 	free(newpwd);
 }
-
 //////////////////////////////////////////////////////////////////////////////
 
-void	echo(char **args)
+void	echo(char **args, t_token *token)
 {
 	int	i;
 	int	new_line;
@@ -128,12 +129,13 @@ void	echo(char **args)
 			else
 				break ;
 		}
-		while (args[i])
+		while (args[i] && token)
 		{
-			ft_printf("%s", args[i]);
+			ft_printf("%s", token->next->value);
 			if (args[i + 1])
 				ft_printf(" ");
 			i++;
+			token = token->next;
 		}
 		if (new_line)
 			ft_printf("\n");
