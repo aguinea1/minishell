@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:07:16 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/27 19:34:06 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:48:40 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ static void	print_exit_status(char *token_str, int exit_status)
 		if(token_str[i] == '$')
 		{
 			ft_printf("%d", exit_status);
-			i = i + 2;
+			return ;
 		}
 		else
-		{	
+		{
 			ft_printf("%c", token_str[i]);
 			i++;
 		}
@@ -79,7 +79,10 @@ void	ft_expansor(t_token *token, t_env *env, int exit_status)
 			if(token_str[i] == '$')
 			{
 				if (token_str[i + 1] == '?')
+				{
 					print_exit_status(token_str, exit_status);
+					return ;
+				}
 				else
 				{
 					token_str = find_env(token_str + i + 1, env, tmp);

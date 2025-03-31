@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:19 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/31 09:35:13 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:40:14 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,13 @@ void	minishell_loop(t_env *env, t_env *export)
 			free(input);
 			continue ;
 		}
-		token = tokenizer(input);
-		ft_expansor(token, env, exit_status);
+		token = tokenizer(input, env, exit_status);
+		if (token == NULL)
+		{
+			free(input);
+			exit_status = 1;
+			continue ;
+		}
 		if (built_in(input, token, env, export) == 0)
 		{
 			free(input);

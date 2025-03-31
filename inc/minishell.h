@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:58 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/31 09:35:43 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:28:12 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef enum s_token_type
 	HEREDOC, // <<
 	APPEND, // >>
 	AMPERSAND, // &
+	OR // ||
 }	t_token_type;
 
 typedef struct s_shell
@@ -82,7 +83,7 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-t_token		*tokenizer(char *input);
+t_token		*tokenizer(char *input, t_env *env, int exit_status);
 void		free_tokens(t_token **token);
 t_command	*parse_pipeline(t_token	*token);
 int			syntax_analize(t_token *tokens);
