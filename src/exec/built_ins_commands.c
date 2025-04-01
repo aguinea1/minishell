@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:38:45 by aguinea           #+#    #+#             */
-/*   Updated: 2025/03/31 12:39:16 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/04/01 10:34:20 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,40 @@ void	ft_env(t_env *env_lst)
 	}
 }
 
+static void    ft_swap_lst(t_env *a, t_env *b)
+{
+    char *temp_key = a->key;
+    char *temp_value = a->value;
+
+    a->key = b->key;
+    a->value = b->value;
+    b->key = temp_key;
+    b->value = temp_value;
+}
+
+static void	ft_bubble(t_env *export)
+{
+	t_env	*tmp;
+	t_env	*before;
+
+	before = export;
+	tmp = export->next;
+	while (tmp)
+	{
+		if (ft_strcmp(before->key, tmp->key) > 0)
+		{
+			ft_swap_lst(before, tmp);
+			before = export;
+			tmp = export->next;
+		}
+		else
+		{
+			tmp = tmp->next;
+			before = before->next;
+		}
+	}
+}
+
 static void	ft_export_lonely(t_env *export)
 {
 	t_env	*tmp;
@@ -166,6 +200,7 @@ static void	ft_export_lonely(t_env *export)
 	tmp = export->next;
 	if (!export)
 		return ;
+	ft_bubble(export);
 	while (tmp)
 	{
 		if (tmp->value[0])
@@ -284,10 +319,8 @@ void	ft_export(t_token *token, t_env *export, int flag)
 		return ;
 
 	temp_value = ft_strdup(token->value + value_start);
-	printf("%s %d\n%s\n", is_equal, value_start, temp_value);
 	if (/*?temp_value? &&*/ flag == 0 && is_equal[value_start -1 ]  != '=')
 	{
-		printf("1\n");
 		free(new_node);
 		return ;
 	}
