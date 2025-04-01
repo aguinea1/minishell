@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:38:45 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/01 10:34:20 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/04/01 12:00:23 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,16 +197,18 @@ static void	ft_export_lonely(t_env *export)
 {
 	t_env	*tmp;
 
-	tmp = export->next;
+	tmp = export;
 	if (!export)
 		return ;
 	ft_bubble(export);
 	while (tmp)
 	{
 		if (tmp->value[0])
-			ft_printf("declare -x %s=%s\n", tmp->key, tmp->value);
+			ft_printf("1 declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		else if (tmp->value)
+			ft_printf("2 declare -x %s=''\n", tmp->key);
 		else
-			ft_printf("declare -x %s%s\n", tmp->key, tmp->value);
+			ft_printf("3 declare -x %s=''\n", tmp->key);
 		tmp = tmp->next;
 	}
 }
@@ -319,7 +321,7 @@ void	ft_export(t_token *token, t_env *export, int flag)
 		return ;
 
 	temp_value = ft_strdup(token->value + value_start);
-	if (/*?temp_value? &&*/ flag == 0 && is_equal[value_start -1 ]  != '=')
+	if (/*?temp_value? &&*/ flag == 0 && is_equal[value_start - 1]  != '=')
 	{
 		free(new_node);
 		return ;
