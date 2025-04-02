@@ -1,0 +1,2 @@
+obj/init/init_no_env.o: src/init/init_no_env.c libft/../inc/minishell.h \
+ libft/../inc/../libft/libft.h libft/../inc/../libft/ft_printf.h

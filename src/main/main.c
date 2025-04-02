@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:19 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/31 20:40:14 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/02 13:13:38 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,20 @@ void	minishell_loop(t_env *env, t_env *export)
 int	main(int ac, char **av, char **env)
 {
 	t_env	*env_lst;
-	t_env	*export;
+	t_env	*exprt_lst;
 
 	(void)ac;
 	(void)av;
-	env_lst = init_env(env);
-	export = init_env(env);
-	minishell_loop(env_lst, export);
+	if (!env | !*env)
+	{
+		env_lst = init_no_env(0);
+		exprt_lst = init_no_env(1);
+	}
+	else
+	{
+		env_lst = init_env(env);
+		exprt_lst = init_env(env);
+	}
+	minishell_loop(env_lst, exprt_lst);
 	return (0);
 }

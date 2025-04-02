@@ -56,7 +56,7 @@ SRCS 		= src/main/main.c src/init/init_env.c src/init/tokenizer.c src/init/expan
        		src/exec/exec_cmd.c src/exec/redirections.c 							\
        		src/others/open_files.c src/exit_and_frees/handler_errors.c 			\
        		src/others/utils.c  src/exec/built_ins_commands.c						\
-       		src/others/signals.c
+       		src/others/signals.c src/init/init_no_env.c
 
 OBJS 		= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPS 		= $(OBJS:$(OBJDIR)/%.o=$(DEPDIR)/%.d)

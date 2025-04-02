@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:58 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/31 20:28:12 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/02 11:28:04 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ void	setup_signals(int signal);
 t_command	*init_command(void);
 void	add_redir_utils(t_redirection *tmp,t_command *cmd, t_redirection *redir);
 void	ft_expansor(t_token *token, t_env *env, int exit_status);
+t_env	*init_no_env(int flag);
 
 #endif

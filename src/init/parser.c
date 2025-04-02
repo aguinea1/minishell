@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 18:57:57 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/24 15:38:34 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/02 09:43:05 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ void	add_redir(t_command *cmd, char **tokens, int *i)
 	redir = malloc(sizeof(t_redirection));
 	if (!redir)
 		return ;
+	redir->fd_in = -1;
+	redir->fd_out = -1;
 	redir->next = NULL;
 	if (!ft_strcmp(tokens[*i], ">"))
 		redir->type = REDIR_OUT;

@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:38:45 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/01 12:00:23 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/04/02 13:50:18 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,14 +201,14 @@ static void	ft_export_lonely(t_env *export)
 	if (!export)
 		return ;
 	ft_bubble(export);
-	while (tmp)
+	while (tmp->next)
 	{
 		if (tmp->value[0])
-			ft_printf("1 declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+			ft_printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
 		else if (tmp->value)
-			ft_printf("2 declare -x %s=''\n", tmp->key);
+			ft_printf("declare -x %s=''\n", tmp->key);
 		else
-			ft_printf("3 declare -x %s=''\n", tmp->key);
+			ft_printf("declare -x %s=\n", tmp->key);
 		tmp = tmp->next;
 	}
 }
@@ -282,6 +282,8 @@ void	ft_export(t_token *token, t_env *export, int flag)
 		tmp->next = new_node;
 	}
 }*/
+
+
 void	ft_export(t_token *token, t_env *export, int flag)
 {
 	t_env	*tmp;
@@ -342,6 +344,8 @@ void	ft_export(t_token *token, t_env *export, int flag)
 	tmp->next = new_node;
 }
 
+
+
 void	ft_unset(t_token *token, t_env *env_lst, t_env *export)
 {
 	int		len;
@@ -362,6 +366,10 @@ void	ft_unset(t_token *token, t_env *env_lst, t_env *export)
 			if (tmp->next)
 			{
 				before->next = tmp->next;
+				free(tmp->key);
+				free(tmp->value);
+				free(tmp);
+				break ;
 			}
 			else
 			{
@@ -385,17 +393,24 @@ void	ft_unset(t_token *token, t_env *env_lst, t_env *export)
 			if (tmp->next)
 			{
 				before->next = tmp->next;
+				free(tmp->key);
+				free(tmp->value);
+				free(tmp);
+				break ;
 			}
 			else
 			{
 				before->next = NULL;
+				free(tmp->key);
+				free(tmp->value);
+				free(tmp);
 				break;
 			}
 		//	free(tmp);
 		}
 		before = before->next;
 	}
-	free(tmp->value);
-	free(tmp->key);
-	free(tmp);
+//	free(tmp->value);
+//	free(tmp->key);
+//	free(tmp);
 }
