@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:38:45 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/02 13:50:18 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:23:00 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,23 @@ static void    ft_swap_lst(t_env *a, t_env *b)
     b->value = temp_value;
 }
 
+int ft_strcmp(const char *s1, const char *s2)
+{
+    unsigned char c1, c2;
+
+    while (*s1 && *s2)
+    {
+        c1 = (unsigned char)*s1;
+        c2 = (unsigned char)*s2;
+        if (c1 != c2)
+            return (c1 - c2);
+
+        s1++;
+        s2++;
+    }
+    return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
 static void	ft_bubble(t_env *export)
 {
 	t_env	*tmp;
@@ -192,6 +209,27 @@ static void	ft_bubble(t_env *export)
 		}
 	}
 }
+/*
+static void	ft_export_lonely(t_env *export)
+{
+	t_env	*tmp;
+
+	tmp = export;
+	if (!export)
+		return ;
+	ft_bubble(export);
+	while (tmp)
+	{
+		if (tmp->value[0])
+			ft_printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		else if (tmp->value)
+			ft_printf("declare -x %s=\"\"\n", tmp->key);
+		else
+			ft_printf("declare -x %s\n", tmp->key);
+		tmp = tmp->next;
+	}
+
+}*/
 
 static void	ft_export_lonely(t_env *export)
 {
@@ -201,18 +239,22 @@ static void	ft_export_lonely(t_env *export)
 	if (!export)
 		return ;
 	ft_bubble(export);
-	while (tmp->next)
+	while (tmp)
 	{
-		if (tmp->value[0])
-			ft_printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
-		else if (tmp->value)
-			ft_printf("declare -x %s=''\n", tmp->key);
+		if (tmp->value)
+		{		
+			if (tmp->value == NULL)
+				ft_printf("declare -x %s\n", tmp->key);
+			else 
+				ft_printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		}
 		else
-			ft_printf("declare -x %s=\n", tmp->key);
+		{
+			ft_printf("declare -x %s\n", tmp->key);
+		}
 		tmp = tmp->next;
 	}
 }
-
 
 static int find_key(char *args)
 {
@@ -223,66 +265,6 @@ static int find_key(char *args)
 		i++;
 	return (i + 1);
 }
-/*
-void	ft_export(t_token *token, t_env *export, int flag)
-{
-	t_env	*tmp;
-	int		value_start;
-	t_env	*new_node;
-	int 	not_new;
-	char	*is_equal;
-
-	if(!export || !token)
-		return ;
-	if (!token->next)
-	{
-		if (flag == 1)
-			ft_export_lonely(export);
-		return ;
-	}
-	token = token->next;
-	not_new = 0;
-	tmp = export;
-	value_start = find_key(token->value);
-	is_equal = token->value;
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->key, token->value , value_start - 1) == 0)
-		{
-			free(tmp->value);
-			tmp->value = ft_strdup(token->value + value_start);
-			not_new = 1;
-		}
-		tmp = tmp->next;
-	}
-	if (not_new == 0)
-	{
-		new_node = malloc(sizeof(t_env));
-		if (!new_node)
-			return ;
-		if (ft_strdup(token->value + value_start)[0] == '\0' && flag == 0 && is_equal[value_start - 1] != '=')
-					return ;
-		new_node->key = ft_substr(token->value, 0, value_start - 1);
-		if (new_node->key == NULL)
-		{
-			free(new_node);
-			return ;
-		}
-		new_node->value = ft_strdup(token->value + value_start);
-		if (new_node->value == NULL)
-		{
-			    free(new_node->key);
-				free(new_node);
-				return ;
-		}
-		new_node->next = NULL;
-		tmp = export;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new_node;
-	}
-}*/
-
 
 void	ft_export(t_token *token, t_env *export, int flag)
 {
@@ -321,12 +303,25 @@ void	ft_export(t_token *token, t_env *export, int flag)
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return ;
-
 	temp_value = ft_strdup(token->value + value_start);
 	if (/*?temp_value? &&*/ flag == 0 && is_equal[value_start - 1]  != '=')
 	{
+		free(temp_value);
 		free(new_node);
 		return ;
+	}
+	if (is_equal[value_start - 1] == '=')
+	{
+		if (temp_value[0] == '\0')
+		{
+			free(temp_value);
+			temp_value = ft_strdup("");
+		}
+	}
+	else
+	{
+		free(temp_value);
+		temp_value = NULL;
 	}
 	new_node->key = ft_substr(token->value, 0, value_start - 1);
 	if (!new_node->key)
@@ -362,7 +357,6 @@ void	ft_unset(t_token *token, t_env *env_lst, t_env *export)
 		tmp = before->next;
 		if (!ft_strncmp(tmp->key, token->value, len))
 		{
-//			printf("%s\n %s1\n", token->value, tmp->key);
 			if (tmp->next)
 			{
 				before->next = tmp->next;
