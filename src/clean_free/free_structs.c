@@ -6,11 +6,11 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 17:36:51 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/18 16:39:59 by arcebria         ###   ########.fr       */
+/*   Updated: 2025/03/28 19:07:18 by arcebria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	free_env(t_env **env)
 {
@@ -60,6 +60,8 @@ void	free_redir(t_redirection **redir)
 	while (current)
 	{
 		tmp = current->next;
+		if (current->type == HEREDOC)
+			free(current->hd_filename);
 		free(current->file);
 		free(current);
 		current = tmp;
@@ -78,7 +80,6 @@ void	free_commands(t_command	**cmds)
 	while (current)
 	{
 		tmp = current->next;
-		//free(current->cmd);
 		if (current->args)
 			ft_free_array(current->args);
 		if (current->env_array)

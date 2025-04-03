@@ -1,15 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/02 17:39:44 by arcebria          #+#    #+#             */
+/*   Updated: 2025/04/02 17:48:18 by arcebria         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIBFT_H
 # define LIBFT_H
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stddef.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stddef.h>
 
 typedef struct s_list
 {
-	void            *content;
-	struct s_list   *next;
-}                   t_list;
+	void			*content;
+	struct s_list	*next;
+}					t_list;
 
 void	ft_bzero(void *s, size_t n);
 int		ft_isalnum(int c);
@@ -62,7 +74,7 @@ size_t	ft_strspn(const char *s, const char *accept);
 int		ft_strcmp(const char *s1, const char *s2);
 int		ft_isspecial(int c);
 int		ft_isspace(int c);
-char    *ft_strcpy(char *dest, char *src);
-char    *ft_strcat(char *dest, char *src);
+char	*ft_strcpy(char *dest, char *src);
+char	*ft_strcat(char *dest, char *src);
 
 #endif

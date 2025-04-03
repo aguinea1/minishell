@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 21:07:16 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/31 20:48:40 by aguinea          ###   ########.fr       */
+/*   Created: 2025/04/03 18:15:23 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/03 18:15:28 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,3 +93,4 @@ void	ft_expansor(t_token *token, t_env *env, int exit_status)
 		tmp = tmp->next;
 	}
 }
+

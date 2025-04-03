@@ -6,11 +6,11 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:47:30 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/18 21:30:33 by arcebria         ###   ########.fr       */
+/*   Updated: 2025/03/28 19:07:40 by arcebria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 int	check_first_and_last(t_token *tokens)
 {

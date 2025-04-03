@@ -1,5 +1,16 @@
-#include "../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 18:54:26 by arcebria          #+#    #+#             */
+/*   Updated: 2025/04/03 14:02:42 by aguinea          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "../../inc/minishell.h"
 t_token *find_last(t_token *node)
 {
 	if (!node)
@@ -113,4 +124,5 @@ t_token *tokenizer(char *input, t_env *env, int exit_status)
 	}
 	return (token);
 }
+
 

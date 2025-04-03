@@ -6,47 +6,11 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:19 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/02 13:13:38 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:46:42 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
-
-static void	free_spl(char **arg)
-{
-	int i = 0;
-	while (arg[i])
-	{
-		free(arg[i]);
-		arg[i] = NULL;
-		i++;
-	}
-	free(arg);
-}
-
-static int	built_in(char *input, t_token *token, t_env *env_lst, t_env *export)
-{
-	char	**args;
-
-	args = ft_split(input, ' ');
-	if (ft_strcmp(args[0], "pwd") == 0)
-		return (free_spl(args),pwd(), 0);
-	if (ft_strcmp(args[0], "cd") == 0)
-		return (cd(args, env_lst, token), free_spl(args), 0);
-	if (ft_strcmp(args[0], "echo") == 0)
-		return (echo(args, token), free_spl(args), 0);
-	if (ft_strcmp(args[0], "env") == 0)
-		return (ft_env(env_lst), free_spl(args), 0);
-	if (ft_strcmp(args[0], "export") == 0)
-	{
-		ft_export(token, export, 1);
-		ft_export(token, env_lst, 0);
-		return (free_spl(args), 0);
-	}
-	if (ft_strcmp(args[0], "unset") == 0)
-		return (free_spl(args), ft_unset(token, env_lst, export), 0);
-	return (free_spl(args), 1);
-}
+#include "../../inc/minishell.h"
 
 void	minishell_loop(t_env *env, t_env *export)
 {
@@ -56,7 +20,7 @@ void	minishell_loop(t_env *env, t_env *export)
 	t_shell		*shell;
 	int	exit_status;
 
-	exit_status = 1;
+	exit_status = 0;
 	command = NULL;
 	setup_signals(1);
 	while (1)
@@ -78,17 +42,11 @@ void	minishell_loop(t_env *env, t_env *export)
 			exit_status = 1;
 			continue ;
 		}
-		if (built_in(input, token, env, export) == 0)
-		{
-			free(input);
-			free_tokens(&token);
-			continue ;
-		}
 		if (syntax_analize(token) == 0)
 		{
 			command = parse_pipeline(token);
-			shell = setup_exec(command);
-			exit_status = exec_cmd(command, shell, env);
+			shell = setup_exec(command, exit_status, env);
+			exit_status = exec_cmd(command, shell, env, export);
 			setup_signals(1);
 		}
 		else
@@ -101,8 +59,7 @@ void	minishell_loop(t_env *env, t_env *export)
 		{
 			free_tokens(&token);
 			free_commands(&command);
-			free_env(&env);	
-			free_env(&export);
+			free_env(&env);
 			free(shell);
 			free(input);
 			break ;

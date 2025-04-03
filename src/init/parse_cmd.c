@@ -6,11 +6,11 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 21:09:03 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/19 16:11:28 by arcebria         ###   ########.fr       */
+/*   Updated: 2025/03/28 19:07:33 by arcebria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 int	env_size(t_env *env)
 {
@@ -97,6 +97,8 @@ char	*get_path(char **env, t_command *cmd)
 
 void	get_cmd(t_command *cmd, t_env *env)
 {
+	if (!cmd->args)
+		return ;
 	cmd->env_array = env_to_array(env);
 	if (ft_strchr(cmd->args[0], '/'))
 		cmd->path = ft_strdup(cmd->args[0]);

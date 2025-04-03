@@ -6,10 +6,9 @@
 #    By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/13 20:05:41 by arcebria          #+#    #+#              #
-#    Updated: 2025/03/27 12:23:25 by aguinea          ###   ########.fr        #
+#    Updated: 2025/04/03 18:16:49 by aguinea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 ################################################################################
 #                             COMPILATION & MORE                               #
@@ -18,7 +17,7 @@
 NAME		= minishell
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g #-fsanitize=address
 DEPFLAGS	= -MMD -MF $(DEPDIR)/$*.d
 INCLUDE		= -Iinc -Ilibft
 
@@ -50,13 +49,17 @@ HEAD_LIBFT	= $(LIBFT_DIR)/libft.h
 ALL_HEADERS	= $(HEADER) $(HEAD_LIBFT)
 
 
-SRCS 		= src/main/main.c src/init/init_env.c src/init/tokenizer.c src/init/expansor.c				\
-       		src/exit_and_frees/free_stuff.c 										\
+SRCS 		= src/main/main.c src/init/init_env.c src/init/tokenizer.c 				\
        		src/init/parser.c src/init/syntax_analize.c src/init/parse_cmd.c 		\
-       		src/exec/exec_cmd.c src/exec/redirections.c 							\
-       		src/others/open_files.c src/exit_and_frees/handler_errors.c 			\
-       		src/others/utils.c  src/exec/built_ins_commands.c						\
-       		src/others/signals.c src/init/init_no_env.c
+			src/setup_exec/open_files.c src/setup_exec/setup_heredoc.c				\
+			src/setup_exec/expand_heredoc.c src/setup_exec/setup_shell.c			\
+       		src/exec/exec_cmd.c src/exec/make_dup.c  src/exec/set_dup.c				\
+			src/exec/manage_heredoc.c src/exec/check_builtins.c						\
+			src/exec/mini_cd.c src/exec/mini_env_echo_pwd.c							\
+			src/exec/mini_unset.c src/exec/minicd_utils.c							\
+       		src/clean_free/clean_fds.c 	src/clean_free/free_structs.c				\
+			src/clean_free/put_errors.c	src/exec/signals.c							\
+			src/init/init_no_env.c src/exec/mini_export.c src/init/expansor.c				
 
 OBJS 		= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPS 		= $(OBJS:$(OBJDIR)/%.o=$(DEPDIR)/%.d)
@@ -89,7 +92,7 @@ clean			:
 
 fclean			: clean
 				@make -C $(LIBFT_DIR) fclean --silent
-				@rm -f $(NAME)	
+				@rm -f $(NAME)
 
 re				: fclean all
 

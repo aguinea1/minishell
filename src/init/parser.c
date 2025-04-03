@@ -6,11 +6,29 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 18:57:57 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/02 09:43:05 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/03/28 19:07:36 by arcebria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
+
+t_command	*init_command(void)
+{
+	t_command	*cmd;
+
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->args = NULL;
+	cmd->env_array = NULL;
+	//cmd->cmd = NULL;
+	cmd->path = NULL;
+	cmd->redirs = NULL;
+	//cmd->redirs->flag_in = 0;
+	//cmd->redirs->flag_out = 0;
+	cmd->next = NULL;
+	return (cmd);
+}
 
 char	**token_to_array(t_token *token)
 {
@@ -46,12 +64,9 @@ void	add_redir(t_command *cmd, char **tokens, int *i)
 	t_redirection	*redir;
 	t_redirection	*tmp;
 
-	tmp = NULL;
 	redir = malloc(sizeof(t_redirection));
 	if (!redir)
 		return ;
-	redir->fd_in = -1;
-	redir->fd_out = -1;
 	redir->next = NULL;
 	if (!ft_strcmp(tokens[*i], ">"))
 		redir->type = REDIR_OUT;
@@ -66,7 +81,12 @@ void	add_redir(t_command *cmd, char **tokens, int *i)
 	if (!cmd->redirs)
 		cmd->redirs = redir;
 	else
-		add_redir_utils(tmp, cmd, redir);
+	{
+		tmp = cmd->redirs;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = redir;
+	}
 }
 
 void	add_args(t_command *cmd, char **token, int *last)
@@ -104,6 +124,7 @@ t_command	*parse_simple_cmd(char **tokens, int *i)
 	if (!ft_strcmp(tokens[0], "|"))
 		return (NULL);
 	cmd = init_command();
+	//cmd->cmd = ft_strdup(tokens[*i]);
 	while (tokens[*i] && ft_strcmp(tokens[*i], "|"))
 	{
 		if (!ft_strcmp(tokens[*i], "<") || !ft_strcmp(tokens[*i], "<<")
