@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:29:58 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/03 18:21:29 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/08 12:07:25 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,47 @@ static int find_key(char *args)
 	return (i + 1);
 }
 
+static char *export_key(char *s, int len)
+{
+	char	*subs;
+	int		i;
+
+	if (!s)
+		return (NULL);
+	subs = malloc(sizeof(char) * (len + 1));
+	if (!subs)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || s[i] == '_')
+			subs[i] = s[i];
+		else if (i > 0 && s[i] >= '0' && s[i] <= '9')
+			subs[i] = s[i];
+		else
+		{
+			free(subs);
+			return (NULL);
+		}
+		i++;
+	}
+	subs[len] = '\0';
+	return (subs);
+}
+
+static int	keycmp(char *key, char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i] == key[i])
+		i++;
+	if ((!arg[i] || arg[i] == '=') && !key[i])
+		return (0);
+	return (1);
+}
+
+
 int	mini_export(t_command *cmd, t_env *export, int flag)
 {
     t_env   *tmp;
@@ -142,7 +183,7 @@ int	mini_export(t_command *cmd, t_env *export, int flag)
     
     while (tmp)
     {
-        if (ft_strncmp(tmp->key, arg, value_start - 1) == 0)
+        if (keycmp(tmp->key, arg) == 0)
         {
             temp_value = ft_strdup(arg + value_start);
             if (!temp_value)
@@ -177,9 +218,10 @@ int	mini_export(t_command *cmd, t_env *export, int flag)
         free(temp_value);
         temp_value = NULL;
     }
-    new_node->key = ft_substr(arg, 0, value_start - 1);
+    new_node->key = export_key(arg, value_start - 1);
     if (!new_node->key)
     {
+		err_out("minishell: ", "export: `", arg, "': not a valid identifier");
         free(new_node);
         free(temp_value);
         return(0);

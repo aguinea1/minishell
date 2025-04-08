@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:07:16 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/28 19:07:30 by arcebria         ###   ########.fr       */
+/*   Updated: 2025/04/08 09:39:29 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ t_env	*init_env(char **env)
 		if (equal_pos == ft_strlen(env[i])) //si no encuentra un = se lo salta y pasa al siguiente str
 			continue ;
 		new_node->key = ft_substr(env[i], 0, equal_pos);
-		new_node->value = ft_strdup(env[i] + equal_pos + 1);
+				if (!ft_strcmp(new_node->key, "SHLVL"))
+			new_node->value = ft_itoa(ft_atoi(env[i] + equal_pos + 1) + 1);
+		else
+			new_node->value = ft_strdup(env[i] + equal_pos + 1);
 		new_node->next = NULL;
 		if (!head)
 			head = new_node;
