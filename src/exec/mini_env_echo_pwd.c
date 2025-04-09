@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:27:28 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/02 15:27:29 by arcebria         ###   ########.fr       */
+/*   Updated: 2025/04/07 21:46:21 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	mini_echo(char **args)
 
 	i = 1;
 	new_line = 1;
-	while (!ft_strncmp(args[i], "-n", 2))
+	while (args[i] && !ft_strncmp(args[i], "-n", 2))
 	{
 		if (ft_strspn(args[i], "-n") == ft_strlen(args[i]))
 		{

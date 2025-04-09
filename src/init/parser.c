@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 18:57:57 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/28 19:07:36 by arcebria         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:19:58 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,8 @@ t_command	*init_command(void)
 		return (NULL);
 	cmd->args = NULL;
 	cmd->env_array = NULL;
-	//cmd->cmd = NULL;
 	cmd->path = NULL;
 	cmd->redirs = NULL;
-	//cmd->redirs->flag_in = 0;
-	//cmd->redirs->flag_out = 0;
 	cmd->next = NULL;
 	return (cmd);
 }
@@ -59,36 +56,6 @@ char	**token_to_array(t_token *token)
 	return (array);
 }
 
-void	add_redir(t_command *cmd, char **tokens, int *i)
-{
-	t_redirection	*redir;
-	t_redirection	*tmp;
-
-	redir = malloc(sizeof(t_redirection));
-	if (!redir)
-		return ;
-	redir->next = NULL;
-	if (!ft_strcmp(tokens[*i], ">"))
-		redir->type = REDIR_OUT;
-	else if (!ft_strcmp(tokens[*i], ">>"))
-		redir->type = APPEND;
-	else if (!ft_strcmp(tokens[*i], "<"))
-		redir->type = REDIR_IN;
-	else if (!ft_strcmp(tokens[*i], "<<"))
-		redir->type = HEREDOC;
-	(*i)++;
-	redir->file = ft_strdup(tokens[*i]);
-	if (!cmd->redirs)
-		cmd->redirs = redir;
-	else
-	{
-		tmp = cmd->redirs;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = redir;
-	}
-}
-
 void	add_args(t_command *cmd, char **token, int *last)
 {
 	int		count;
@@ -117,21 +84,23 @@ void	add_args(t_command *cmd, char **token, int *last)
 	cmd->args = new_args;
 }
 
-t_command	*parse_simple_cmd(char **tokens, int *i)
+t_command	*parse_simple_cmd(t_token *token, char **tokens, int *i)
 {
 	t_command	*cmd;
+	t_token		*tmp;
 
+	tmp = token;
 	if (!ft_strcmp(tokens[0], "|"))
 		return (NULL);
 	cmd = init_command();
-	//cmd->cmd = ft_strdup(tokens[*i]);
-	while (tokens[*i] && ft_strcmp(tokens[*i], "|"))
+	while (tokens[*i] && tmp->type != PIPE)
 	{
 		if (!ft_strcmp(tokens[*i], "<") || !ft_strcmp(tokens[*i], "<<")
 			|| !ft_strcmp(tokens[*i], ">") || !ft_strcmp(tokens[*i], ">>"))
 			add_redir(cmd, tokens, i);
 		else
 			add_args(cmd, tokens, i);
+		tmp = tmp->next;
 		(*i)++;
 	}
 	return (cmd);
@@ -153,7 +122,7 @@ t_command	*parse_pipeline(t_token	*token)
 	i = 0;
 	while (tokens[i])
 	{
-		new_cmd = parse_simple_cmd(tokens, &i);
+		new_cmd = parse_simple_cmd(token, tokens, &i);
 		if (!new_cmd)
 			break ;
 		if (!head)

@@ -6,7 +6,7 @@
 #    By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/13 20:05:41 by arcebria          #+#    #+#              #
-#    Updated: 2025/04/03 18:16:49 by aguinea          ###   ########.fr        #
+#    Updated: 2025/04/08 16:32:06 by aguinea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 NAME		= minishell
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g -fsanitize=address
 DEPFLAGS	= -MMD -MF $(DEPDIR)/$*.d
 INCLUDE		= -Iinc -Ilibft
 
@@ -59,7 +59,9 @@ SRCS 		= src/main/main.c src/init/init_env.c src/init/tokenizer.c 				\
 			src/exec/mini_unset.c src/exec/minicd_utils.c							\
        		src/clean_free/clean_fds.c 	src/clean_free/free_structs.c				\
 			src/clean_free/put_errors.c	src/exec/signals.c							\
-			src/init/init_no_env.c src/exec/mini_export.c src/init/expansor.c				
+			src/init/init_no_env.c src/exec/mini_export.c src/init/expansor.c		\
+			src/exec/mini_export_utils.c src/exec/mini_export_create.c				\
+			src/init/parser_utils.c src/init/tokenizer_utils.c
 
 OBJS 		= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPS 		= $(OBJS:$(OBJDIR)/%.o=$(DEPDIR)/%.d)

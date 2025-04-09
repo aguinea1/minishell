@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 18:47:58 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/03 18:19:40 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/08 17:12:10 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,16 @@ t_token		*tokenizer(char *input, t_env *env, int exit_status);
 int			syntax_analize(t_token *tokens);
 t_command	*parse_pipeline(t_token	*token);
 t_env		*init_env(char **env);
+void		add_redir(t_command *cmd, char **tokens, int *i);
+void		handle_word(t_token **token, char *input, int *i, t_env *env, int exit_status);
+int			handle_quotes(t_token **token, char *input, int *i);
+int			handle_operator_token(t_token **token, char *input, int *i);
+int			handle_redirection(t_token **token, char *input, int *i);
+int			handle_pipe_ampersand(t_token **token, char *input, int *i);
+t_token		*find_last(t_token *node);
+void		add_token(t_token **token, char *value, t_token_type type);
+int			extract_quoted_token(t_token **token, char *input, int *i);
+int	extract_word(t_token **token, char *input, int *i);
 
 //set_executor
 
@@ -126,6 +136,14 @@ int			mini_echo(char **args);
 int			mini_env(t_env *env_lst);
 int			mini_unset(t_command *cmd, t_env **env, t_env **export, int n_cmds);
 int			mini_export(t_command *cmd, t_env *export, int flag);
+char		*export_key(char *s, int len);
+int			find_key(char *args);
+void		ft_bubble(t_env *export);
+void		ft_swap_lst(t_env *a, t_env *b);
+int			should_skip_creation(char *arg, int value_start, int flag);
+char		*get_export_value(char *arg, int value_start);
+t_env		*init_new_node(char *arg, int value_start, char *temp_value);
+void		append_to_list(t_env *export, t_env *new_node);
 
 //expansor && env
 
@@ -146,7 +164,6 @@ void		close_pipes(t_shell *shell);
 
 void		free_tokens(t_token **token);
 void		free_commands(t_command	**cmds);
-void		free_tokens(t_token **token);
 void		free_env(t_env **env);
 
 //put errors in stderr

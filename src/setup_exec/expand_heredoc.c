@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 16:04:29 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/02 16:58:22 by arcebria         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:06:53 by arcebria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*line_expanded(char *line, t_env *env, int exit_status)
 		tmp = ft_strjoin(result, addition);
 		free(result);
 		free(addition);
-		result = tmp;
 	}
-	return (result);
+	free(line);
+	return (tmp);
 }

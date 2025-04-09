@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:07:16 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/08 09:39:29 by isegura-         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:41:20 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,37 +68,45 @@ void	set_essential(t_env **env)
 	free (dir);
 }
 
+static t_env	*create_env_node(char *env_entry)
+{
+	t_env	*new_node;
+	size_t	equal_pos;
+
+	equal_pos = ft_strcspn(env_entry, "=");
+	if (equal_pos == ft_strlen(env_entry))
+		return (NULL);
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return (NULL);
+	new_node->key = ft_substr(env_entry, 0, equal_pos);
+	new_node->value = ft_strdup(env_entry + equal_pos + 1);
+	new_node->next = NULL;
+	return (new_node);
+}
+
 t_env	*init_env(char **env)
 {
 	t_env	*head;
-	t_env	*new_node;
 	t_env	*last_node;
-	size_t	equal_pos;
+	t_env	*new_node;
 	int		i;
 
-	head = NULL;
-	last_node = NULL;
 	i = 0;
+	last_node = NULL;
+	head = NULL;
 	while (env[i])
 	{
-		new_node = malloc(sizeof(t_env));
+		new_node = create_env_node(env[i]);
 		if (!new_node)
-			return (NULL);
-		equal_pos = ft_strcspn(env[i], "=");
-		if (equal_pos == ft_strlen(env[i])) //si no encuentra un = se lo salta y pasa al siguiente str
+		{
+			i++;
 			continue ;
-		new_node->key = ft_substr(env[i], 0, equal_pos);
-				if (!ft_strcmp(new_node->key, "SHLVL"))
-			new_node->value = ft_itoa(ft_atoi(env[i] + equal_pos + 1) + 1);
-		else
-			new_node->value = ft_strdup(env[i] + equal_pos + 1);
-		new_node->next = NULL;
+		}
 		if (!head)
 			head = new_node;
 		else
-		{
 			last_node->next = new_node;
-		}
 		last_node = new_node;
 		i++;
 	}

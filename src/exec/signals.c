@@ -6,11 +6,12 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:11:11 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/03 18:11:16 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/08 13:58:12 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
 static void	signal_handler(int signal)
 {
 	if (signal == SIGINT)
@@ -30,7 +31,6 @@ static void	signal_handler(int signal)
 
 static void	child_handler(int signal)
 {
-
 	write(1, "\n", 1);
 	if (signal == SIGQUIT)
 	{
@@ -42,8 +42,8 @@ static void	child_handler(int signal)
 void	setup_signals(int i)
 {
 	struct sigaction	sa;
-	sigemptyset(&sa.sa_mask);
 
+	sigemptyset(&sa.sa_mask);
 	if (i)
 		sa.sa_handler = &signal_handler;
 	else

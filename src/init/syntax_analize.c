@@ -6,7 +6,7 @@
 /*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 13:47:30 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/28 19:07:40 by arcebria         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:30:22 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	check_first_and_last(t_token *tokens)
 	while (tmp->next)
 		tmp = tmp->next;
 	last = tmp;
-	if (head->value[0] == '|' || last->value[0] == '|')
+	if (head->type == PIPE || last->type == PIPE)
 	{
 		ft_putstr_fd(S_E_PIPE, 2);
 		return (1);
@@ -40,7 +40,6 @@ int	check_consecutives(t_token *tokens)
 	tmp = tokens;
 	while (tmp)
 	{
-		//esta linea esta cambiada en las otras ramas de parseo, asi en principio esta bien. EN las otras | < da error, pero no necesariamente es asi
 		if (tmp->next && tmp->type == PIPE && tmp->next->type == PIPE)
 		{
 			ft_putstr_fd(S_E_PIPE, 2);
