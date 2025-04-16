@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mini_export_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 13:52:25 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/08 14:24:53 by aguinea          ###   ########.fr       */
+/*   Created: 2025/04/12 19:54:34 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:03:13 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 void	ft_swap_lst(t_env *a, t_env *b)
 {

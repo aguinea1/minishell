@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analize.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 13:47:30 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/08 16:30:22 by aguinea          ###   ########.fr       */
+/*   Created: 2025/03/04 21:07:16 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,14 @@ int	check_file(t_token	*tokens)
 	tmp = tokens;
 	while (tmp)
 	{
-		if ((tmp->value[0] == '<' || tmp->value[0] == '>')
-			&& !tmp->next)
+		if ((tmp->value[0] == '<' || tmp->value[0] == '>'))
 		{
-			ft_putstr_fd(S_E_REDIR, 2);
-			return (1);
+			if (!tmp->next || tmp->next->value[0] == '<'
+				|| tmp->next->value[0] == '>')
+			{
+				ft_putstr_fd(S_E_REDIR, 2);
+				return (1);
+			}
 		}
 		tmp = tmp->next;
 	}

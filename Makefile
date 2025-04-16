@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+         #
+#    By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/12/13 20:05:41 by arcebria          #+#    #+#              #
-#    Updated: 2025/04/08 16:32:06 by aguinea          ###   ########.fr        #
+#    Created: 2024/12/13 20:05:41 by aguinea           #+#    #+#              #
+#    Updated: 2025/04/16 17:27:06 by aguinea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,8 @@
 NAME		= minishell
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g -fsanitize=address
-DEPFLAGS	= -MMD -MF $(DEPDIR)/$*.d
+CFLAGS		= -Wall -Wextra -Werror -g  -fsanitize=address
+DEPFLAGS	= -MMD -MF $(DEPDIR)/$*.d # NO PASA LA NORMA
 INCLUDE		= -Iinc -Ilibft
 
 
@@ -49,8 +49,10 @@ HEAD_LIBFT	= $(LIBFT_DIR)/libft.h
 ALL_HEADERS	= $(HEADER) $(HEAD_LIBFT)
 
 
-SRCS 		= src/main/main.c src/init/init_env.c src/init/tokenizer.c 				\
-       		src/init/parser.c src/init/syntax_analize.c src/init/parse_cmd.c 		\
+SRCS 		= src/main/main.c src/shell_loop/shell_loop.c 							\
+			src/init/init_env.c src/init/tokenizer.c src/init/parser.c				\
+       		src/init/syntax_analize.c src/init/parse_cmd.c							\
+			src/init/tokenizer_handle_word.c 										\
 			src/setup_exec/open_files.c src/setup_exec/setup_heredoc.c				\
 			src/setup_exec/expand_heredoc.c src/setup_exec/setup_shell.c			\
        		src/exec/exec_cmd.c src/exec/make_dup.c  src/exec/set_dup.c				\
@@ -76,7 +78,7 @@ all				: dir $(LIBFT_A) $(NAME)
 
 $(NAME)			: $(OBJS) $(LIBFT_A) Makefile
 				@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) -o $(NAME) -lreadline
-				@echo "\033[31mPLVS VLTRA\033[0m"
+				@echo "\033[31mMINI\033[0m"
 
 dir				:
 				@mkdir -p $(OBJDIR) $(DEPDIR) $(dir $(OBJS)) $(dir $(DEPS))
@@ -84,13 +86,13 @@ dir				:
 $(LIBFT_A)		:
 				@make -C $(LIBFT_DIR) --silent
 
-$(OBJDIR)/%.o	: $(SRCDIR)/%.c $(ALL_HEADERS) | dir
+$(OBJDIR)/%.o	: $(SRCDIR)/%.c Makefile $(ALL_HEADERS) | dir
 				@$(CC) $(CFLAGS) $(DEPFLAGS) $(INCLUDE) -c $< -o $@
 
 clean			:
 				@make -C $(LIBFT_DIR) clean --silent
 				@rm -rf $(OBJDIR) $(DEPDIR)
-				@echo "\033[31mNON PLVS VLTRA\033[0m"
+				@echo "\033[31mDEU\033[0m"
 
 fclean			: clean
 				@make -C $(LIBFT_DIR) fclean --silent

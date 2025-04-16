@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_stuff.c                                       :+:      :+:    :+:   */
+/*   free_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/08 17:36:51 by arcebria          #+#    #+#             */
-/*   Updated: 2025/03/28 19:07:18 by arcebria         ###   ########.fr       */
+/*   Created: 2025/03/08 17:36:51 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:10:10 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ void	free_commands(t_command	**cmds)
 	t_command	*current;
 	t_command	*tmp;
 
-	current = *cmds;
 	if (!cmds || !*cmds)
 		return ;
+	current = *cmds;
 	while (current)
 	{
 		tmp = current->next;

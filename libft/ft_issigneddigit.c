@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isspecial.c                                     :+:      :+:    :+:   */
+/*   ft_issigneddigit.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,20 @@
 
 #include "libft.h"
 
-int	ft_isspecial(int c)
+int	ft_issigneddigit(char *str)
 {
-	if (c == '<' || c == '>' || c == '&' || c == '|' || c == '\'' || c == '\"')
-		return (1);
-	return (0);
+	int	i;
+
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (!str[i])
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }

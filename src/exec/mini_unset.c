@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_unset.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/02 15:27:44 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/02 15:27:45 by arcebria         ###   ########.fr       */
+/*   Created: 2025/04/02 15:27:44 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	remove_node(t_env **lst, char *key)
 			if (prev)
 				prev->next = tmp->next;
 			else
-				*lst = tmp->next;
+				*lst = (*lst)->next;
 			free(tmp->key);
 			free(tmp->value);
 			free(tmp);

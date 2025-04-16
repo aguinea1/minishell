@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 18:47:58 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/08 17:12:10 by aguinea          ###   ########.fr       */
+/*   Created: 2025/03/04 21:07:16 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <unistd.h>
 # include <stdio.h>
 # include <string.h>
 # include <fcntl.h>
@@ -20,6 +21,8 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
+# include <termios.h>
 # include "../libft/libft.h"
 # include "../libft/ft_printf.h"
 
@@ -28,14 +31,14 @@
 
 typedef enum s_token_type
 {
-	WORD, // TEXTO
-	PIPE, // |
-	REDIR_IN, // <
-	REDIR_OUT, // >
-	HEREDOC, // <<
-	APPEND, // >>
-	AMPERSAND, // &
-	OR // ||
+	WORD,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	HEREDOC,
+	APPEND,
+	AMPERSAND,
+	OR
 }	t_token_type;
 
 typedef struct s_env
@@ -85,22 +88,31 @@ typedef struct s_command
 	struct s_command	*next;
 }	t_command;
 
+//loop
+
+int			minishell_loop(t_env *env, t_env *export);
+
 //tokenizer, syntax check and parsing
 
 t_token		*tokenizer(char *input, t_env *env, int exit_status);
 int			syntax_analize(t_token *tokens);
 t_command	*parse_pipeline(t_token	*token);
 t_env		*init_env(char **env);
-void		add_redir(t_command *cmd, char **tokens, int *i);
-void		handle_word(t_token **token, char *input, int *i, t_env *env, int exit_status);
-int			handle_quotes(t_token **token, char *input, int *i);
+int			handle_quotes(t_token **token, char *input, int *i, int *flag);
 int			handle_operator_token(t_token **token, char *input, int *i);
 int			handle_redirection(t_token **token, char *input, int *i);
 int			handle_pipe_ampersand(t_token **token, char *input, int *i);
 t_token		*find_last(t_token *node);
 void		add_token(t_token **token, char *value, t_token_type type);
 int			extract_quoted_token(t_token **token, char *input, int *i);
-int	extract_word(t_token **token, char *input, int *i);
+int			extract_word(t_token **token, char *input, int *i);
+void		handle_word(t_token **token, char *input, int *i, int *export_mode);
+
+//signals
+
+void		sigint_handler(int signum);
+void		setup_signals(int signal);
+void		disable_signal_echo(void);
 
 //set_executor
 
@@ -109,12 +121,12 @@ t_shell		*init_shell(t_command *cmd);
 void		create_pipes(t_shell *shell);
 void		open_heredoc(t_redirection *redir, t_shell *shell,
 				int exit_status, t_env *env);
-char		*line_expanded(char *line, t_env *env, int exit_status);
+char		*check_to_expand(char *line, int *i, t_env *env, int exit_status);
 
 //exec
 
 void		get_cmd(t_command *cmd, t_env *env);
-int			exec_cmd(t_command *cmd, t_shell *shell, t_env *env, t_env *exp);
+int			exec_cmd(t_command *cmd, t_shell *shell, t_env **env, t_env **exp);
 int			cmd_size(t_command *cmd);
 int			set_dup(t_redirection *redir, t_shell *shell);
 int			dup_first_child(t_redirection *redir, t_shell *shell);
@@ -147,13 +159,12 @@ void		append_to_list(t_env *export, t_env *new_node);
 
 //expansor && env
 
-t_env	*init_no_env(int flag);
-void	ft_env(t_env *env_lst);
-void	sigint_handler(int signum);
-void	setup_signals(int signal);
+t_env		*init_no_env(int flag);
+void		ft_env(t_env *env_lst);
 t_command	*init_command(void);
-void	add_redir_utils(t_redirection *tmp,t_command *cmd, t_redirection *redir);
-void	ft_expansor(t_token *token, t_env *env, int exit_status);
+void		add_redir_utils(t_redirection *tmp,
+				t_command *cmd, t_redirection *redir);
+void		ft_expansor(t_token *token, t_env *env, int exit_status);
 
 //manage fds
 

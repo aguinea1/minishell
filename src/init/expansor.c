@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 18:15:23 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/08 17:17:07 by aguinea          ###   ########.fr       */
+/*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	print_exit_status(t_token *token, int exit_status, int i)
 	char	*temp;
 	char	*new_value;
 
-	before = strndup(token->value, i);
+	before = ft_strndup(token->value, i);
 	after = ft_strdup(token->value + i + 2);
 	status_str = ft_itoa(exit_status);
 	temp = ft_strjoin(before, status_str);
@@ -37,7 +37,7 @@ static char	*find_env(char *token_str, t_env *env)
 {
 	while (env)
 	{
-		if (!strcmp(token_str, env->key))
+		if (!ft_strcmp(token_str, env->key))
 			return (ft_strdup(env->value));
 		env = env->next;
 	}
@@ -63,10 +63,10 @@ static char	*ft_aux_expansor(int j, t_env *env, int i, t_token *tmp)
 	char	*expansion;
 	char	*new_value;
 
-	before = strndup(tmp->value, i);
+	before = ft_strndup(tmp->value, i);
 	while (tmp->value[j] && (ft_isalnum(tmp->value[j]) || tmp->value[j] == '_'))
 		j++;
-	var_name = strndup(tmp->value + i + 1, j - (i + 1));
+	var_name = ft_strndup(tmp->value + i + 1, j - (i + 1));
 	after = ft_strdup(tmp->value + j);
 	expansion = find_env(var_name, env);
 	new_value = join_expanded_parts(before, expansion, after);
@@ -82,25 +82,23 @@ static char	*ft_aux_expansor(int j, t_env *env, int i, t_token *tmp)
 void	ft_expansor(t_token *token, t_env *env, int exit_status)
 {
 	t_token	*tmp;
-	char	*token_str;
 	int		i;
 
 	tmp = token;
 	while (tmp)
 	{
-		token_str = tmp->value;
 		i = 0;
-		while (token_str[i])
+		while (tmp->value && tmp->value[i])
 		{
-			if (token_str[i] == '$')
+			if (tmp->value[i] == '$')
 			{
-				if (token_str[i + 1] == '?')
-				{
+				if (tmp->value[i + 1] == '?')
 					print_exit_status(tmp, exit_status, i);
-				}
 				else
+				{
 					ft_aux_expansor(i + 1, env, i, tmp);
-				break ;
+					i = -1;
+				}
 			}
 			i++;
 		}

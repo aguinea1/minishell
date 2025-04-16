@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isspecial.c                                     :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,20 @@
 
 #include "libft.h"
 
-int	ft_isspecial(int c)
+char	*ft_strndup(const char *s, size_t n)
 {
-	if (c == '<' || c == '>' || c == '&' || c == '|' || c == '\'' || c == '\"')
-		return (1);
-	return (0);
+	char	*cpy;
+	size_t	i;
+
+	cpy = malloc(n + 1);
+	if (!cpy)
+		return (NULL);
+	i = 0;
+	while (s[i] && i < n)
+	{
+		cpy[i] = s[i];
+		i++;
+	}
+	cpy[i] = '\0';
+	return (cpy);
 }

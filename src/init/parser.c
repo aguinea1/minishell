@@ -3,60 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/08 18:57:57 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/08 16:19:58 by aguinea          ###   ########.fr       */
+/*   Created: 2025/03/04 21:07:16 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_command	*init_command(void)
+t_redirection	*create_redirection(t_token **token)
 {
-	t_command	*cmd;
+	t_redirection	*redir;
 
-	cmd = malloc(sizeof(t_command));
-	if (!cmd)
+	redir = malloc(sizeof(t_redirection));
+	if (!redir)
 		return (NULL);
-	cmd->args = NULL;
-	cmd->env_array = NULL;
-	cmd->path = NULL;
-	cmd->redirs = NULL;
-	cmd->next = NULL;
-	return (cmd);
+	redir->next = NULL;
+	if ((*token)->type == REDIR_OUT)
+		redir->type = REDIR_OUT;
+	else if ((*token)->type == APPEND)
+		redir->type = APPEND;
+	else if ((*token)->type == REDIR_IN)
+		redir->type = REDIR_IN;
+	else if ((*token)->type == HEREDOC)
+		redir->type = HEREDOC;
+	else
+		return (NULL);
+	*token = (*token)->next;
+	redir->file = ft_strdup((*token)->value);
+	*token = (*token)->next;
+	redir->next = NULL;
+	return (redir);
 }
 
-char	**token_to_array(t_token *token)
+void	add_redir(t_command *cmd, t_token **token)
 {
-	int		count;
-	int		i;
-	char	**array;
-	t_token	*tmp;
+	t_redirection	*redir;
+	t_redirection	*tmp;
 
-	tmp = token;
-	count = 0;
-	while (tmp)
+	redir = create_redirection(token);
+	if (!redir)
+		return ;
+	if (!cmd->redirs)
+		cmd->redirs = redir;
+	else
 	{
-		count++;
-		tmp = tmp->next;
+		tmp = cmd->redirs;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = redir;
 	}
-	array = malloc(sizeof(char *) * (count + 1));
-	if (!array)
-		return (NULL);
-	tmp = token;
-	i = 0;
-	while (i < count)
-	{
-		array[i] = ft_strdup(tmp->value);
-		tmp = tmp->next;
-		i++;
-	}
-	array[i] = NULL;
-	return (array);
 }
 
-void	add_args(t_command *cmd, char **token, int *last)
+void	add_args(t_command *cmd, t_token **token)
 {
 	int		count;
 	int		i;
@@ -77,52 +77,43 @@ void	add_args(t_command *cmd, char **token, int *last)
 		new_args[i] = ft_strdup(cmd->args[i]);
 		i++;
 	}
-	new_args[count] = ft_strdup(token[*last]);
+	new_args[count] = ft_strdup((*token)->value);
 	new_args[count + 1] = NULL;
 	if (cmd->args)
 		ft_free_array(cmd->args);
 	cmd->args = new_args;
+	*token = (*token)->next;
 }
 
-t_command	*parse_simple_cmd(t_token *token, char **tokens, int *i)
+t_command	*parse_simple_cmd(t_token **token)
 {
 	t_command	*cmd;
-	t_token		*tmp;
 
-	tmp = token;
-	if (!ft_strcmp(tokens[0], "|"))
+	if ((*token)->type == PIPE)
 		return (NULL);
 	cmd = init_command();
-	while (tokens[*i] && tmp->type != PIPE)
+	while (*token && (*token)->type != PIPE)
 	{
-		if (!ft_strcmp(tokens[*i], "<") || !ft_strcmp(tokens[*i], "<<")
-			|| !ft_strcmp(tokens[*i], ">") || !ft_strcmp(tokens[*i], ">>"))
-			add_redir(cmd, tokens, i);
+		if ((*token)->type == REDIR_IN || (*token)->type == HEREDOC
+			|| (*token)->type == REDIR_OUT || (*token)->type == APPEND)
+			add_redir(cmd, token);
 		else
-			add_args(cmd, tokens, i);
-		tmp = tmp->next;
-		(*i)++;
+			add_args(cmd, token);
 	}
 	return (cmd);
 }
 
 t_command	*parse_pipeline(t_token	*token)
 {
-	t_command	*new_cmd;
 	t_command	*head;
 	t_command	*current;
-	char		**tokens;
-	int			i;
+	t_command	*new_cmd;
 
-	tokens = token_to_array(token);
 	head = NULL;
 	current = NULL;
-	if (!tokens)
-		return (NULL);
-	i = 0;
-	while (tokens[i])
+	while (token)
 	{
-		new_cmd = parse_simple_cmd(token, tokens, &i);
+		new_cmd = parse_simple_cmd(&token);
 		if (!new_cmd)
 			break ;
 		if (!head)
@@ -130,9 +121,8 @@ t_command	*parse_pipeline(t_token	*token)
 		else
 			current->next = new_cmd;
 		current = new_cmd;
-		if (tokens[i] && !ft_strcmp(tokens[i], "|"))
-			i++;
+		if (token && token->type == PIPE)
+			token = token->next;
 	}
-	ft_free_array(tokens);
 	return (head);
 }

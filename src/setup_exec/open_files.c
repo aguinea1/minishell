@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 17:18:35 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/02 16:40:58 by arcebria         ###   ########.fr       */
+/*   Created: 2025/03/04 21:07:16 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	check_type(t_redirection *redir, t_shell *shell, int stat, t_env *env)
 		open_infile(redir);
 	else if (redir->type == HEREDOC)
 	{
+		shell->here_doc = 1;
 		open_heredoc(redir, shell, stat, env);
 		shell->hd_count++;
 	}

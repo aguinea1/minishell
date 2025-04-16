@@ -1,6 +1,18 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/04/16 17:09:23 by aguinea           #+#    #+#              #
+#    Updated: 2025/04/16 17:12:25 by aguinea          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 
 NAME = libft.a
-
+CC  = cc
 FLAGS = -Wall -Wextra -Werror
 HBONUS = .bonus
 
@@ -25,6 +37,7 @@ SRCS =  ft_isascii.c \
 	ft_itoa.c \
 	ft_putchar_fd.c \
 	ft_strdup.c \
+	ft_strndup.c \
 	ft_strmapi.c \
 	ft_tolower.c \
 	ft_isalnum.c \
@@ -47,6 +60,7 @@ SRCS =  ft_isascii.c \
 	ft_isspace.c \
 	ft_strcpy.c \
 	ft_strcat.c \
+	ft_issigneddigit.c \
 	ft_printf.c type_cs.c type_num.c type_xXp.c
 
 
@@ -67,7 +81,7 @@ $(HBONUS): $(BOBJS)
 	ar rc $(NAME) $(BOBJS)
 
 %.o : %.c libft.h ft_printf.h Makefile
-	cc $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS) $(BOBJS)

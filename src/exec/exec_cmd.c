@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arcebria <arcebria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/17 15:27:40 by arcebria          #+#    #+#             */
-/*   Updated: 2025/04/03 18:12:49 by aguinea          ###   ########.fr       */
+/*   Created: 2025/03/17 15:27:40 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/16 17:02:21 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	exe_parent(t_command *cmd, t_shell *shell)
 		{
 			if (shell->child == (shell->n_pipes) && WIFEXITED(status))
 				exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				exit_status = 128 + WTERMSIG(status);
 		}
 		shell->child--;
 	}
@@ -70,7 +72,7 @@ int	exe_parent(t_command *cmd, t_shell *shell)
 	return (exit_status);
 }
 
-int	exec_cmd(t_command *cmd, t_shell *shell, t_env *env, t_env *export)
+int	exec_cmd(t_command *cmd, t_shell *shell, t_env **env, t_env **export)
 {
 	t_command	*c_tmp;
 
@@ -78,18 +80,18 @@ int	exec_cmd(t_command *cmd, t_shell *shell, t_env *env, t_env *export)
 	setup_signals(0);
 	while (shell->child < shell->n_cmds)
 	{
-		if (check_parent_builtin(c_tmp, shell, &env, &export))
+		if (check_parent_builtin(c_tmp, shell, env, export))
 		{
 			shell->child++;
 			c_tmp = c_tmp->next;
 			continue ;
 		}
-		get_cmd(c_tmp, env);
+		get_cmd(c_tmp, *env);
 		shell->pids[shell->child] = fork();
 		if (shell->pids[shell->child] == -1)
 			return (perror("fork"), 1);
 		else if (shell->pids[shell->child] == 0)
-			exe_child(c_tmp, shell, env);
+			exe_child(c_tmp, shell, *env);
 		shell->child++;
 		c_tmp = c_tmp->next;
 	}
