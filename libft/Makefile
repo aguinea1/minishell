@@ -61,7 +61,7 @@ SRCS =  ft_isascii.c \
 	ft_strcpy.c \
 	ft_strcat.c \
 	ft_issigneddigit.c \
-	ft_printf.c type_cs.c type_num.c type_xXp.c
+	ft_printf.c type_cs.c type_num.c type_xXp.c ft_realloc.c
 
 
 BSRCS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \

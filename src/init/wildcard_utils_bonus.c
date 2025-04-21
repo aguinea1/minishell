@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-include "../../inc/minishell_bonus.h"
+#include "../../inc/minishell_bonus.h"
+#include "../../inc/minishell.h"
 
 static int	ft_strncmp_wildcard(const char *filename, const char *pattern,
 		int n)

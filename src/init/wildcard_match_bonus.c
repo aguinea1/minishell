@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../inc/minishell_bonus.h"
+#include "../../inc/minishell.h"
 
 int	check_final_segment(const char *pattern, const char *filename, int n)
 {

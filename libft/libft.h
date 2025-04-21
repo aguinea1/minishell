@@ -24,6 +24,7 @@ typedef struct s_list
 }					t_list;
 
 void	ft_bzero(void *s, size_t n);
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isascii(int c);
