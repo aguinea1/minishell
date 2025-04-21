@@ -11,95 +11,151 @@
 # **************************************************************************** #
 
 ################################################################################
-#                             COMPILATION & MORE                               #
+#                              CONFIGURATION                                   #
 ################################################################################
 
-NAME		= minishell
+NAME			= minishell
+NAME_BONUS		= minishell_bonus
 
-CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g  -fsanitize=address
-DEPFLAGS	= -MMD -MF $(DEPDIR)/$*.d # NO PASA LA NORMA
-INCLUDE		= -Iinc -Ilibft
+CC				= cc
+CFLAGS			= -Wall -Wextra -Werror -g -fsanitize=address
+DEPFLAGS		= -MMD -MF $(DEPDIR)/$*.d
+LDFLAGS			= -lreadline
 
+INCLUDE			= -Iinc -Ilibft -I/usr/include
 
-
-################################################################################
-#                                 PATH/TO/SRCS                                 #
-################################################################################
-
-SRCDIR		= src
-
-OBJDIR		= obj
-
-DEPDIR		= deps
-
-LIBFT_DIR	= libft
-
-INCLUDE_DIR	= inc
+SRCDIR			= src
+OBJDIR			= obj
+DEPDIR			= deps
+LIBFT_DIR		= libft
+INCLUDE_DIR		= inc
 
 ################################################################################
-#                           SRCS & OBJS & DEPS                                 #
+#                              SOURCE FILES                                    #
 ################################################################################
 
+SRCS = \
+	src/main/main.c \
+	src/shell_loop/shell_loop.c \
+	src/init/init_env.c \
+	src/init/init_no_env.c \
+	src/init/tokenizer.c \
+	src/init/parser.c \
+	src/init/parser_utils.c \
+	src/init/tokenizer_handle_word.c \
+	src/init/tokenizer_utils.c \
+	src/init/expansor.c \
+	src/init/parse_cmd.c \
+	src/init/syntax_analize.c \
+	src/setup_exec/open_files.c \
+	src/setup_exec/setup_heredoc.c \
+	src/setup_exec/expand_heredoc.c \
+	src/setup_exec/setup_shell.c \
+	src/exec/exec_cmd.c \
+	src/exec/make_dup.c \
+	src/exec/set_dup.c \
+	src/exec/manage_heredoc.c \
+	src/exec/check_builtins.c \
+	src/exec/mini_cd.c \
+	src/exec/mini_env_echo_pwd.c \
+	src/exec/mini_unset.c \
+	src/exec/mini_export.c \
+	src/exec/mini_export_utils.c \
+	src/exec/mini_export_create.c \
+	src/exec/minicd_utils.c \
+	src/exec/signals.c \
+	src/clean_free/clean_fds.c \
+	src/clean_free/free_structs.c \
+	src/clean_free/put_errors.c
 
-LIBFT_A		= $(LIBFT_DIR)/libft.a
-
-HEADER		= $(INCLUDE_DIR)/minishell.h
-HEAD_LIBFT	= $(LIBFT_DIR)/libft.h
-ALL_HEADERS	= $(HEADER) $(HEAD_LIBFT)
-
-
-SRCS 		= src/main/main.c src/shell_loop/shell_loop.c 							\
-			src/init/init_env.c src/init/tokenizer.c src/init/parser.c				\
-       		src/init/syntax_analize.c src/init/parse_cmd.c							\
-			src/init/tokenizer_handle_word.c 										\
-			src/setup_exec/open_files.c src/setup_exec/setup_heredoc.c				\
-			src/setup_exec/expand_heredoc.c src/setup_exec/setup_shell.c			\
-       		src/exec/exec_cmd.c src/exec/make_dup.c  src/exec/set_dup.c				\
-			src/exec/manage_heredoc.c src/exec/check_builtins.c						\
-			src/exec/mini_cd.c src/exec/mini_env_echo_pwd.c							\
-			src/exec/mini_unset.c src/exec/minicd_utils.c							\
-       		src/clean_free/clean_fds.c 	src/clean_free/free_structs.c				\
-			src/clean_free/put_errors.c	src/exec/signals.c							\
-			src/init/init_no_env.c src/exec/mini_export.c src/init/expansor.c		\
-			src/exec/mini_export_utils.c src/exec/mini_export_create.c				\
-			src/init/parser_utils.c src/init/tokenizer_utils.c
-
-OBJS 		= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-DEPS 		= $(OBJS:$(OBJDIR)/%.o=$(DEPDIR)/%.d)
-
+SRCS_BONUS = \
+	src/main/main.c \
+	src/shell_loop/shell_loop_bonus.c \
+	src/init/init_env.c \
+	src/init/init_no_env.c \
+	src/init/tokenizer_bonus.c \
+	src/init/parser.c \
+	src/init/parser_utils.c \
+	src/init/tokenizer_handle_word.c \
+	src/init/tokenizer_utils.c \
+	src/init/expansor.c \
+	src/init/parse_cmd.c \
+	src/init/syntax_analize.c \
+	src/init/wildcard_bonus.c \
+	src/init/wildcard_match_bonus.c \
+	src/init/wildcard_utils_bonus.c \
+	src/setup_exec/open_files.c \
+	src/setup_exec/setup_heredoc.c \
+	src/setup_exec/expand_heredoc.c \
+	src/setup_exec/setup_shell.c \
+	src/exec/exec_cmd.c \
+	src/exec/make_dup.c \
+	src/exec/set_dup.c \
+	src/exec/manage_heredoc.c \
+	src/exec/check_builtins.c \
+	src/exec/mini_cd.c \
+	src/exec/mini_env_echo_pwd.c \
+	src/exec/mini_unset.c \
+	src/exec/mini_export.c \
+	src/exec/mini_export_utils.c \
+	src/exec/mini_export_create.c \
+	src/exec/minicd_utils.c \
+	src/exec/signals.c \
+	src/clean_free/clean_fds.c \
+	src/clean_free/free_structs.c \
+	src/clean_free/put_errors.c
 
 ################################################################################
-#                              MAKEFILE RULES                                  #
+#                             OBJECTS & DEPS                                   #
 ################################################################################
 
+OBJS			= $(SRCS:%.c=$(OBJDIR)/%.o)
+OBJS_BONUS		= $(SRCS_BONUS:%.c=$(OBJDIR)/%.o)
+DEPS			= $(OBJS:%.o=$(DEPDIR)/%.d)
+DEPS_BONUS		= $(OBJS_BONUS:%.o=$(DEPDIR)/%.d)
 
-all				: dir $(LIBFT_A) $(NAME)
+LIBFT_A			= $(LIBFT_DIR)/libft.a
+HEADERS			= inc/minishell.h libft/libft.h
+HEADERS_BONUS	= inc/minishell_bonus.h libft/libft.h
 
-$(NAME)			: $(OBJS) $(LIBFT_A) Makefile
-				@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) -o $(NAME) -lreadline
-				@echo "\033[31mMINI\033[0m"
+################################################################################
+#                              RULES                                           #
+################################################################################
 
-dir				:
-				@mkdir -p $(OBJDIR) $(DEPDIR) $(dir $(OBJS)) $(dir $(DEPS))
+all: dir $(LIBFT_A) $(NAME)
 
-$(LIBFT_A)		:
-				@make -C $(LIBFT_DIR) --silent
+bonus: dir $(LIBFT_A) $(NAME_BONUS)
 
-$(OBJDIR)/%.o	: $(SRCDIR)/%.c Makefile $(ALL_HEADERS) | dir
-				@$(CC) $(CFLAGS) $(DEPFLAGS) $(INCLUDE) -c $< -o $@
+$(NAME): $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) $(LDFLAGS) -o $@
+	@echo "\033[1;33mMINI\033[0m"
 
-clean			:
-				@make -C $(LIBFT_DIR) clean --silent
-				@rm -rf $(OBJDIR) $(DEPDIR)
-				@echo "\033[31mDEU\033[0m"
+$(NAME_BONUS): $(OBJS_BONUS)
+	@$(CC) $(CFLAGS) $(OBJS_BONUS) $(LIBFT_A) $(LDFLAGS) -o $@
+	@echo "\033[1;33mMINI BONUS\033[0m"
 
-fclean			: clean
-				@make -C $(LIBFT_DIR) fclean --silent
-				@rm -f $(NAME)
+$(OBJDIR)/%.o: %.c $(HEADERS)
+	@mkdir -p $(dir $@) $(dir $(DEPDIR)/$*.d)
+	@$(CC) $(CFLAGS) $(DEPFLAGS) $(INCLUDE) -c $< -o $@
 
-re				: fclean all
+$(LIBFT_A):
+	@make -C $(LIBFT_DIR) --silent
+
+dir:
+	@mkdir -p $(OBJDIR) $(DEPDIR)
+
+clean:
+	@make -C $(LIBFT_DIR) clean --silent
+	@rm -rf $(OBJDIR) $(DEPDIR)
+	@echo "\033[1;33mCHAU\033[0m"
+
+fclean: clean
+	@make -C $(LIBFT_DIR) fclean --silent
+	@rm -f $(NAME) $(NAME_BONUS)
+
+re: fclean all
 
 -include $(DEPS)
+-include $(DEPS_BONUS)
 
-.PHONY: all clean fclean re dir
+.PHONY: all clean fclean re dir bonus

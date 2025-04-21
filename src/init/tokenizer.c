@@ -91,6 +91,7 @@ t_token	*tokenizer(char *input, t_env *env, int exit_status)
 	int		flag_quote;
 
 	i = 0;
+	flag_quote = 0;
 	token = NULL;
 	export_mode = is_export_mode(input);
 	while (input[i])
