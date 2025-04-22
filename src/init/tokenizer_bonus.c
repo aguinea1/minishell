@@ -6,17 +6,15 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/22 12:08:00 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char *manage_wildcard(char *input);
-
-char 	*ft_strchr_wildcard(const char *s, char c)
+char	*ft_strchr_wildcard(const char *s, char c)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (s[i] != (char)c)
@@ -76,38 +74,49 @@ int	extract_quoted_token(t_token **token, char *input, int *i)
 	return (0);
 }
 
+static int	process_tokens(t_token **token, char *input,
+			int *export_mode, int *flag_quotes)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == ' ' || input[i] == '\t')
+			i++;
+		else if (handle_operator_token(token, input, &i))
+			continue ;
+		else if (handle_quotes(token, input, &i, flag_quotes))
+			return (0);
+		else
+			handle_word(token, input, &i, export_mode);
+	}
+	return (1);
+}
+
 t_token	*tokenizer(char *input, t_env *env, int exit_status)
 {
 	t_token	*token;
-	int		i;
 	int		export_mode;
 	int		flag_quotes;
 	int		check_input;
 
-	check_input = 0;
-	i = 0;
-	flag_quotes = 0;
 	token = NULL;
 	export_mode = 0;
+	flag_quotes = 0;
+	check_input = 0;
 	if (ft_strchr_wildcard(input, '*'))
 	{
 		input = manage_wildcard(input);
 		check_input = 1;
 	}
-	while (input[i])
-	{
-		if (input[i] == ' ' || input[i] == '\t')
-			i++;
-		else if (handle_operator_token(&token, input, &i))
-			continue ;
-		else if (handle_quotes(&token, input, &i, &flag_quotes))
-			return (free_tokens(&token), NULL);
-		else
-			handle_word(&token, input, &i, &export_mode);
-	}
-	if (check_input == 1)
-		free (input);
+	if (!process_tokens(&token, input, &export_mode, &flag_quotes))
+		free_tokens(&token);
+	if (check_input)
+		free(input);
 	if (!export_mode && !flag_quotes)
 		ft_expansor(token, env, exit_status);
+	if (!token)
+		return (NULL);
 	return (token);
 }

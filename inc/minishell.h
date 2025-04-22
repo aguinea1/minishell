@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:07:16 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/22 11:32:11 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ void		create_pipes(t_shell *shell);
 void		open_heredoc(t_redirection *redir, t_shell *shell,
 				int exit_status, t_env *env);
 char		*check_to_expand(char *line, int *i, t_env *env, int exit_status);
+char		*manage_wildcard(char *input);
+char		*manage_new_input(char *new_input, int j, int *i, char *expanded);
 
 //exec
 

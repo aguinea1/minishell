@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:40 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:02:21 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/22 11:08:27 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	exe_parent(t_command *cmd, t_shell *shell)
 	}
 	free(shell->pipes);
 	free(shell->pids);
-	//desde aqui se puede liberar cmd, redir y shell
 	make_unlink(cmd, shell);
 	return (exit_status);
 }

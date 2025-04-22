@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/22 11:51:02 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	check_final_segment(const char *pattern, const char *filename, int n)
 {
-	int		pat_tail_len;
+	int			pat_tail_len;
 	const char	*p_tail;
 	size_t		len;
 
@@ -31,10 +31,10 @@ int	check_final_segment(const char *pattern, const char *filename, int n)
 			p_tail--;
 			pat_tail_len++;
 		}
-		if (ft_strlen(filename) < (size_t)pat_tail_len ||
-			ft_strncmp(filename + ft_strlen(filename) - pat_tail_len, p_tail,
-			pat_tail_len) != 0)
-		return (1);
+		if (ft_strlen(filename) < (size_t)pat_tail_len
+			|| ft_strncmp(filename + ft_strlen(filename) - pat_tail_len, p_tail,
+				pat_tail_len) != 0)
+			return (1);
 	}
 	return (0);
 }
@@ -53,7 +53,7 @@ int	check_initial_segment(const char *p, const char *filename, int *seg_len)
 
 int	process_segment(const char **pos, const char **p, int seg_len, int n)
 {
-	int     found;
+	int	found;
 
 	found = 0;
 	while (**pos && ((*p - *pos) < n))
@@ -70,9 +70,9 @@ int	process_segment(const char **pos, const char **p, int seg_len, int n)
 
 int	handle_pattern_segments(const char *pattern, const char *filename, int n)
 {
-	const char  *p;
-	const char  *pos;
-	int         seg_len;
+	const char	*p;
+	const char	*pos;
+	int			seg_len;
 
 	p = pattern;
 	pos = filename;

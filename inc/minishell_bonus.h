@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_bonus.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 21:07:16 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
+/*   Created: 2025/04/22 10:58:55 by aguinea           #+#    #+#             */
+/*   Updated: 2025/04/22 12:48:17 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MINISHELL_BONUS_H
+# define MINISHELL_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -19,73 +19,17 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/wait.h>
+# include <dirent.h>
+# include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
 # include "../libft/libft.h"
+# include "minishell.h"
 # include "../libft/ft_printf.h"
 
 # define S_E_PIPE "minishell: syntax error near unexpected token `|'\n"
 # define S_E_REDIR "minishell: syntax error near unexpected token `newline'\n"
-
-typedef enum s_token_type
-{
-	WORD,
-	PIPE,
-	REDIR_IN,
-	REDIR_OUT,
-	HEREDOC,
-	APPEND,
-	AMPERSAND,
-	OR
-}	t_token_type;
-
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
-typedef struct s_shell
-{
-	int		n_pipes;
-	int		n_cmds;
-	int		*pipes;
-	pid_t	*pids;
-	int		child;
-	int		flag_in;
-	int		flag_out;
-	int		here_doc;
-	int		hd_count;
-	int		builtins_exit_status;
-}	t_shell;
-
-typedef struct s_token
-{
-	char			*value;
-	t_token_type	type;
-	struct s_token	*next;
-}	t_token;
-
-typedef struct s_redirection
-{
-	int						type;
-	char					*file;
-	int						fd_in;
-	int						fd_out;
-	char					*hd_filename;
-	struct s_redirection	*next;
-}	t_redirection;
-
-typedef struct s_command
-{
-	char				**args;
-	char				**env_array;
-	char				*path;
-	t_redirection		*redirs;
-	struct s_command	*next;
-}	t_command;
 
 //loop
 
@@ -149,6 +93,8 @@ int			should_skip_creation(char *arg, int value_start, int flag);
 char		*get_export_value(char *arg, int value_start);
 t_env		*init_new_node(char *arg, int value_start, char *temp_value);
 void		append_to_list(t_env *export, t_env *new_node);
+int			ft_strncmp_wildcard(const char *filename,
+				const char *pattern, int n);
 
 //expansor && env
 
@@ -166,12 +112,21 @@ char		*ft_strchr_wildcard(const char *s, char c);
 void		ft_free_array(char **arr);
 char		**get_dir_elements(void);
 char		*fuse_results(char *new_input, int start, int *end, char *expanded);
-int		check_initial_segment(const char *p, const char *filename, int *seg_len);
-int		check_final_segment(const char *pattern, const char *filename, int n);
-int		process_segment(const char **pos, const char **p, int seg_len, int n);
-int		handle_pattern_segments(const char *pattern, const char *filename, int n);
+int			check_initial_segment(const char *p,
+				const char *filename, int *seg_len);
+int			check_final_segment(const char *pattern,
+				const char *filename, int n);
+int			process_segment(const char **pos, const char **p,
+				int seg_len, int n);
+int			handle_pattern_segments(const char *pattern,
+				const char *filename, int n);
 char		*expand_wildcard(int start, int end, char *pattern);
 char		*manage_wildcard(char *input);
+char		*handle_wildcard_at(char *input, int *i);
+char		**read_and_filter_dir(DIR *dir);
+int			add_file(char ***files, int *count, const char *filename);
+void		append_matches_to_result(char *result, char **files,
+				char *pattern, int pattern_len);
 
 //manage fds
 
@@ -187,5 +142,4 @@ void		free_env(t_env **env);
 //put errors in stderr
 
 void		err_out(char *str1, char *str2, char *str3, char *str4);
-
 #endif

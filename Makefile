@@ -6,7 +6,7 @@
 #    By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/13 20:05:41 by aguinea           #+#    #+#              #
-#    Updated: 2025/04/16 17:27:06 by aguinea          ###   ########.fr        #
+#    Updated: 2025/04/22 11:59:56 by aguinea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -103,7 +103,8 @@ SRCS_BONUS = \
 	src/exec/signals.c \
 	src/clean_free/clean_fds.c \
 	src/clean_free/free_structs.c \
-	src/clean_free/put_errors.c
+	src/clean_free/put_errors.c	\
+	src/init/utils_normi.c
 
 ################################################################################
 #                             OBJECTS & DEPS                                   #
