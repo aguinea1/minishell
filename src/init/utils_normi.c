@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:57:00 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/22 12:42:39 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/22 13:31:55 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@ char	**read_and_filter_dir(DIR *dir)
 	entry = readdir(dir);
 	while (entry != NULL)
 	{
-		entry = readdir(dir);
 		if (entry->d_name[0] != '.')
 		{
 			if (!add_file(&files, &count, entry->d_name))
 				return (ft_free_array(files), NULL);
 		}
+		entry = readdir(dir);
 	}
+	closedir(dir);
 	files = ft_realloc(files, count * sizeof(char *),
 			(count + 1) * sizeof(char *));
 	if (files)

@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/22 12:01:32 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/22 13:34:31 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,18 @@ char	*manage_new_input(char *new_input, int j, int *i, char *expanded)
 
 int	add_file(char ***files, int *count, const char *filename)
 {
-	*files = ft_realloc(*files, (*count) * sizeof(char *),
-			(*count + 1) * sizeof(char *));
-	if (!(*files))
-		return (0);
-	(*files)[(*count)++] = ft_strdup(filename);
-	return (1);
+	char **new_files;
+
+    new_files = ft_realloc(*files, (*count) * sizeof(char *),
+                           (*count + 1) * sizeof(char *));
+    if (!new_files)
+        return (0);
+    new_files[*count] = ft_strdup(filename);
+    if (!new_files[*count])
+        return (ft_free_array(new_files), 0);
+    (*count)++;
+    *files = new_files;
+    return (1);
 }
 
 char	**get_dir_elements(void)
@@ -61,7 +67,6 @@ char	**get_dir_elements(void)
 	if (!dir)
 		return (perror("opendir"), NULL);
 	files = read_and_filter_dir(dir);
-	closedir(dir);
 	return (files);
 }
 
