@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/22 12:46:04 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/23 17:34:09 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,20 @@ int	ft_strncmp_wildcard(const char *filename, const char *pattern,
 	return (handle_pattern_segments(pattern + seg_len, filename + seg_len, n));
 }
 
-static size_t	calculate_total_length(char **files,
-				char *pattern, int pattern_len)
+char	*expand_wildcard(int start, int end, char *pattern)
 {
+	char	**files;
+	char	*result;
 	size_t	total_len;
+	int		pattern_len;
 	int		i;
 
+	files = get_dir_elements();
+	if (!files)
+		return (NULL);
+	result = NULL;
 	total_len = 0;
+	pattern_len = end - start;
 	i = 0;
 	while (files && files[i])
 	{
@@ -40,28 +47,22 @@ static size_t	calculate_total_length(char **files,
 			total_len += ft_strlen(files[i]) + 1;
 		i++;
 	}
-	return (total_len);
-}
-
-char	*expand_wildcard(int start, int end, char *pattern)
-{
-	char	**files;
-	char	*result;
-	size_t	total_len;
-	int		pattern_len;
-
-	files = get_dir_elements();
-	if (!files)
-		return (NULL);
-	pattern_len = end - start;
-	total_len = calculate_total_length(files, pattern, pattern_len);
 	if (total_len == 0)
-		return (ft_free_array(files), NULL);
+		return (NULL);
 	result = malloc(total_len + 1);
 	if (!result)
-		return (ft_free_array(files), NULL);
+		return (NULL);
 	result[0] = '\0';
-	append_matches_to_result(result, files, pattern, pattern_len);
+	i = 0;
+	while (files && files[i])
+	{
+		if (ft_strncmp_wildcard(files[i], pattern, pattern_len) == 0)
+		{
+			ft_strcat(result, files[i]);
+			ft_strcat(result, " ");
+		}
+		i++;
+	}
 	ft_free_array(files);
 	return (result);
 }
@@ -88,27 +89,4 @@ char	*fuse_results(char *new_input, int start, int *end, char *expanded)
 	expanded_len = ft_strlen(expanded);
 	*end = start + expanded_len;
 	return (result);
-}
-
-char	*handle_wildcard_at(char *input, int *i)
-{
-	int		start;
-	int		end;
-	char	*pattern;
-	char	*expanded;
-
-	start = *i;
-	while (start > 0 && input[start - 1] != ' ')
-		start--;
-	end = *i;
-	while (input[end] && input[end] != ' ')
-		end++;
-	pattern = ft_strndup(&input[start], end - start);
-	if (!pattern)
-		return (NULL);
-	expanded = expand_wildcard(start, end, pattern);
-	free(pattern);
-	if (expanded)
-		return (manage_new_input(input, start, i, expanded));
-	return (input);
 }

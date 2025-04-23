@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/22 12:08:00 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/23 18:32:54 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*ft_strchr_wildcard(const char *s, char c)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (s[i] != (char)c)
@@ -28,6 +29,14 @@ char	*ft_strchr_wildcard(const char *s, char c)
 		if (s[i] == '\0')
 			return (NULL);
 		i++;
+	}
+	j = i;
+	if (s[i - 1] != ' ')
+	{
+		while (s[j] != ' ' && j > 0)
+			j--;
+		if (j == 0)
+			return (NULL);
 	}
 	return ((char *)&s[i]);
 }

@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/22 13:34:31 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/23 18:16:22 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,24 @@
 #include "../../inc/minishell_bonus.h"
 #include <dirent.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 void	ft_free_array(char **arr)
 {
-	int	i;
+    int i;
 
-	i = 0;
-	if (!arr)
-		return ;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
+	i  = 0;
+    if (!arr)
+        return;
+    while (arr[i])
+    {
+        free(arr[i]);
+        i++;
+    }
+    free(arr);
 }
 
-char	*manage_new_input(char *new_input, int j, int *i, char *expanded)
+char  	*manage_new_input(char *new_input, int j, int *i, char *expanded)
 {
 	char	*old_input;
 	char	*result;
@@ -42,56 +43,70 @@ char	*manage_new_input(char *new_input, int j, int *i, char *expanded)
 	return (result);
 }
 
-int	add_file(char ***files, int *count, const char *filename)
-{
-	char **new_files;
-
-    new_files = ft_realloc(*files, (*count) * sizeof(char *),
-                           (*count + 1) * sizeof(char *));
-    if (!new_files)
-        return (0);
-    new_files[*count] = ft_strdup(filename);
-    if (!new_files[*count])
-        return (ft_free_array(new_files), 0);
-    (*count)++;
-    *files = new_files;
-    return (1);
-}
-
 char	**get_dir_elements(void)
 {
-	DIR		*dir;
-	char	**files;
+	DIR				*dir;
+	struct dirent	*entry;
+	char			**files;
+	int				count;
 
+	files = NULL;
 	dir = opendir(".");
 	if (!dir)
-		return (perror("opendir"), NULL);
-	files = read_and_filter_dir(dir);
+		return (perror("opendir"), (NULL));
+	count = 0;
+	entry = readdir(dir);
+	while (entry != NULL)
+	{
+		if (entry->d_name[0] != '.')
+		{
+			files = ft_realloc(files, count * sizeof(char *),
+					(count + 1) * sizeof(char *));
+			if (!files)
+				return (ft_free_array(files), NULL);
+			files[count++] = ft_strdup(entry->d_name);
+		}
+		entry = readdir(dir);
+	}
+	closedir(dir);
+	files = ft_realloc(files, count * sizeof(char *),
+			(count + 1) * sizeof(char *));
+	files[count] = NULL;
 	return (files);
 }
 
 char	*manage_wildcard(char *input)
 {
 	int		i;
+	int		j;
 	char	*new_input;
+	char	*pattern;
+	char	*expanded;
 
 	i = 0;
 	new_input = ft_strdup(input);
 	while (new_input[i])
 	{
 		if (new_input[i] == '\'')
-			while (new_input[++i] && new_input[i] != '\'')
+			while (input[++i] != '\'')
 				;
-		else if (new_input[i] == '"')
-			while (new_input[++i] && new_input[i] != '"')
+		if (new_input[i] == '"')
+			while (input[++i] != '"')
 				;
-		else if (new_input[i] == '*')
+		if (new_input[i] == '*')
 		{
-			new_input = handle_wildcard_at(new_input, &i);
-			if (!new_input)
-				return (NULL);
+			j = i;
+			while (j > 0 && new_input[j - 1] != ' ')
+				j--;
+			while (new_input[i] && new_input[i] != ' ')
+				i++;
+			pattern = ft_strndup(&new_input[j], i - j);
+			expanded = expand_wildcard(j, i, pattern);
+			free(pattern);
+			if (expanded)
+				new_input = manage_new_input(new_input, j, &i, expanded);
 		}
-		else
+		else if (new_input[i])
 			i++;
 	}
 	return (new_input);

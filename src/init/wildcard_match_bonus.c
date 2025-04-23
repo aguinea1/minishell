@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/22 11:51:02 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:55:30 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	check_final_segment(const char *pattern, const char *filename, int n)
 		}
 		if (ft_strlen(filename) < (size_t)pat_tail_len
 			|| ft_strncmp(filename + ft_strlen(filename) - pat_tail_len, p_tail,
-				pat_tail_len) != 0)
+			pat_tail_len) != 0)
 			return (1);
 	}
 	return (0);
