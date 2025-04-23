@@ -1,4 +1,11 @@
-	<img src="https://img.shields.io/badge/Unix-Bash%20Clone-yellow?style=flat-square"/>
+<h1 align="center"> 
+ 	MINISHELL
+ </h1>
+ 
+ <p align="center">
+ 	<img src="https://img.shields.io/badge/Language-C-blue?style=flat-square"/>
+ 	<img src="https://img.shields.io/badge/Project-Minishell-green?style=flat-square"/>
+ 	<img src="https://img.shields.io/badge/Unix-Bash%20Clone-yellow?style=flat-square"/>
  </p>
  
  **Minishell** is a project that recreates a simplified version of the Unix shell using **C**. It provides a command-line interface that interprets and executes user commands, handling **builtins**, **pipes**, **redirections**, and **environment variables**. This project helps develop a deep understanding of process control, terminal behavior, parsing, and memory management in Unix systems.
