@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 10:58:55 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/22 17:13:47 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/23 21:24:16 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int			ft_strncmp_wildcard(const char *filename,
 				const char *pattern, int n);
 char			*handle_wildcard(char *new_input, int *i);
 void		skip_quoted_sections(char *input, char *new_input, int *i);
+char		*ft_strchr_wildcard(const char *s, char c);
 
 //expansor && env
 
@@ -128,6 +129,7 @@ char		**read_and_filter_dir(DIR *dir);
 int			add_file(char ***files, int *count, const char *filename);
 void		append_matches_to_result(char *result, char **files,
 				char *pattern, int pattern_len);
+int			collect_directory_files(DIR *dir, char ***files);
 
 //manage fds
 

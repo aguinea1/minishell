@@ -6,40 +6,11 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 20:01:08 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/23 18:32:54 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/23 21:25:18 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-char	*ft_strchr_wildcard(const char *s, char c)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (s[i] != (char)c)
-	{
-		if (s[i] == '\'')
-			while (s[++i] != '\'')
-				;
-		if (s[i] == '"')
-			while (s[++i] != '"')
-				;
-		if (s[i] == '\0')
-			return (NULL);
-		i++;
-	}
-	j = i;
-	if (s[i - 1] != ' ')
-	{
-		while (s[j] != ' ' && j > 0)
-			j--;
-		if (j == 0)
-			return (NULL);
-	}
-	return ((char *)&s[i]);
-}
 
 void	add_token(t_token **token, char *value, t_token_type type)
 {
