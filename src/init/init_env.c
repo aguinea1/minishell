@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:07:16 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/24 12:38:06 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ static t_env	*create_env_node(char *env_entry)
 	if (!new_node)
 		return (NULL);
 	new_node->key = ft_substr(env_entry, 0, equal_pos);
-	new_node->value = ft_strdup(env_entry + equal_pos + 1);
+	if (!ft_strcmp(new_node->key, "SHLVL"))
+		new_node->value = ft_itoa(ft_atoi(env_entry + equal_pos + 1) + 1);
+	else
+		new_node->value = ft_strdup(env_entry + equal_pos + 1);
 	new_node->next = NULL;
 	return (new_node);
 }
