@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:55:56 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:04:14 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/24 13:26:46 by isegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static void	ft_export_lonely(t_env *export)
 			if (!tmp->value)
 				ft_printf("declare -x %s\n", tmp->key);
 			else
-				ft_printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+				if(ft_strcmp(tmp->key, "_"))
+					ft_printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
 		}
 		else
 		{
