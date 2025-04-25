@@ -45,7 +45,7 @@ static int	keycmp(char *key, char *arg)
 	i = 0;
 	while (arg[i] && key[i] && arg[i] == key[i])
 		i++;
-	if ((!arg[i] || arg[i] == '=') && !key[i])
+	if ((!arg[i] || arg[i] == '=' || arg[i] == '+') && !key[i])
 		return (0);
 	return (1);
 }
@@ -54,6 +54,7 @@ static int	update_if_repeated(t_env *export, char *arg, int value_start)
 {
 	t_env	*tmp;
 	char	*temp_value;
+	char	*joined;
 
 	tmp = export;
 	while (tmp)
@@ -63,6 +64,12 @@ static int	update_if_repeated(t_env *export, char *arg, int value_start)
 			if (arg[value_start - 1] != '=')
 				return (1);
 			temp_value = ft_strdup(arg + value_start);
+			if (arg[value_start - 2] == '+')
+			{
+				joined = ft_strjoin(tmp->value, temp_value);
+				free(temp_value);
+				temp_value = joined;
+			}
 			free(tmp->value);
 			tmp->value = temp_value;
 			return (1);
@@ -83,7 +90,7 @@ static int	create_and_add_node(t_env *export, char *arg,
 	temp_value = get_export_value(arg, value_start);
 	if (!temp_value && arg[value_start - 1] == '=')
 		return (0);
-	new_node = init_new_node(arg, value_start, temp_value);
+	new_node = init_new_node(arg, value_start, temp_value, flag);
 	if (!new_node)
 		return (1);
 	append_to_list(export, new_node);

@@ -39,7 +39,7 @@ char	*get_export_value(char *arg, int value_start)
 	return (temp_value);
 }
 
-t_env	*init_new_node(char *arg, int value_start, char *temp_value)
+t_env	*init_new_node(char *arg, int value_start, char *temp_value, int flag)
 {
 	t_env	*new_node;
 
@@ -52,7 +52,8 @@ t_env	*init_new_node(char *arg, int value_start, char *temp_value)
 	new_node->key = export_key(arg, value_start - 1);
 	if (!new_node->key)
 	{
-		err_out("minishell: ", "export: `", arg, "': not a valid identifier");
+		if	(flag == 1)
+			err_out("minishell: ", "export: `", arg, "': not a valid identifier");
 		free(new_node);
 		free(temp_value);
 		return (NULL);

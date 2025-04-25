@@ -71,7 +71,11 @@ int	find_key(char *args)
 
 	i = 0;
 	while (args[i] != '=' && args[i])
+	{
+		if (args[i] == '+')
+			return (i + 2);
 		i++;
+	}	
 	return (i + 1);
 }
 
@@ -80,18 +84,18 @@ char	*export_key(char *s, int len)
 	char	*subs;
 	int		i;
 
-	if (!s)
+	if (!s || !len)
 		return (NULL);
 	subs = malloc(sizeof(char) * (len + 1));
-	if (!subs)
+	if (len > 1 && s[len - 1] == '+' && s[len] == '=')
+		len--;
+	if (!subs || !len)
 		return (NULL);
 	i = 0;
 	while (i < len)
 	{
-		if ((s[i] >= 'a' && s[i] <= 'z')
-			|| (s[i] >= 'A' && s[i] <= 'Z') || s[i] == '_')
-			subs[i] = s[i];
-		else if (i > 0 && s[i] >= '0' && s[i] <= '9')
+		if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z')
+		|| s[i] == '_' || (i > 0 && s[i] >= '0' && s[i] <= '9'))
 			subs[i] = s[i];
 		else
 		{

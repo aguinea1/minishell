@@ -91,7 +91,7 @@ void		ft_bubble(t_env *export);
 void		ft_swap_lst(t_env *a, t_env *b);
 int			should_skip_creation(char *arg, int value_start, int flag);
 char		*get_export_value(char *arg, int value_start);
-t_env		*init_new_node(char *arg, int value_start, char *temp_value);
+t_env		*init_new_node(char *arg, int value_start, char *temp_value, int flag);
 void		append_to_list(t_env *export, t_env *new_node);
 int			ft_strncmp_wildcard(const char *filename,
 				const char *pattern, int n);
