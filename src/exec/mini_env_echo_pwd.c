@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:27:28 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/22 16:49:27 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/27 13:58:49 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,27 @@ int	mini_echo(char **args)
 {
 	int	i;
 	int	new_line;
+	int	j;
 
 	i = 1;
+	j = 1;
 	new_line = 1;
-	while (args[i] && !ft_strncmp(args[i], "-n", 2))
+	if (args[i][0] == '-')
 	{
-		if (ft_strspn(args[i], "-n") == ft_strlen(args[i]))
+		while(args[1][i] && args[1][i] == 'n')
+			i++;
+		if (args[1][i] == '\0')
 		{
 			new_line = 0;
-			i++;
+			j++;
 		}
-		else
-			break ;
 	}
-	while (args[i])
+	while (args[j])
 	{
-		ft_printf("%s", args[i]);
-		if (args[i + 1])
+		ft_printf("%s", args[j]);
+		if (args[j + 1])
 			ft_printf(" ");
-		i++;
+		j++;
 	}
 	if (new_line)
 		ft_printf("\n");

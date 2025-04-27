@@ -6,7 +6,7 @@
 #    By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/13 20:05:41 by aguinea           #+#    #+#              #
-#    Updated: 2025/04/22 11:59:56 by aguinea          ###   ########.fr        #
+#    Updated: 2025/04/27 12:59:07 by aguinea          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -123,15 +123,15 @@ HEADERS_BONUS	= inc/minishell_bonus.h libft/libft.h
 #                              RULES                                           #
 ################################################################################
 
-all: dir $(LIBFT_A) $(NAME)
+all: dir lib $(NAME)
 
-bonus: dir $(LIBFT_A) $(NAME_BONUS)
+bonus: dir lib $(NAME_BONUS)
 
-$(NAME): $(OBJS)
+$(NAME): Makefile $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) $(LDFLAGS) -o $@
 	@echo "\033[1;33mMINI\033[0m"
 
-$(NAME_BONUS): $(OBJS_BONUS)
+$(NAME_BONUS): Makefile $(OBJS_BONUS)
 	@$(CC) $(CFLAGS) $(OBJS_BONUS) $(LIBFT_A) $(LDFLAGS) -o $@
 	@echo "\033[1;33mMINI BONUS\033[0m"
 
@@ -139,7 +139,7 @@ $(OBJDIR)/%.o: %.c $(HEADERS)
 	@mkdir -p $(dir $@) $(dir $(DEPDIR)/$*.d)
 	@$(CC) $(CFLAGS) $(DEPFLAGS) $(INCLUDE) -c $< -o $@
 
-$(LIBFT_A):
+lib:
 	@make -C $(LIBFT_DIR) --silent
 
 dir:
