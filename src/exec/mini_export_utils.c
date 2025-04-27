@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:54:34 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:03:13 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:17:43 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	find_key(char *args)
 		if (args[i] == '+')
 			return (i + 2);
 		i++;
-	}	
+	}
 	return (i + 1);
 }
 
@@ -95,7 +95,7 @@ char	*export_key(char *s, int len)
 	while (i < len)
 	{
 		if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z')
-		|| s[i] == '_' || (i > 0 && s[i] >= '0' && s[i] <= '9'))
+			|| s[i] == '_' || (i > 0 && s[i] >= '0' && s[i] <= '9'))
 			subs[i] = s[i];
 		else
 		{

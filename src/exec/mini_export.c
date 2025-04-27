@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:55:56 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/27 12:48:14 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:23:31 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	ft_export_lonely(t_env *export)
 			if (!tmp->value)
 				ft_printf("declare -x %s\n", tmp->key);
 			else
-				if(ft_strcmp(tmp->key, "_"))
+				if (ft_strcmp(tmp->key, "_"))
 					ft_printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
 		}
 		else
@@ -50,13 +50,14 @@ static int	keycmp(char *key, char *arg)
 	return (1);
 }
 
-static int	update_if_repeated(t_env *export, char *arg, int value_start)
+int	update_if_repeated(t_env *export, char *arg, int value_start)
 {
 	t_env	*tmp;
 	char	*temp_value;
 	char	*joined;
 
 	tmp = export;
+	joined = NULL;
 	while (tmp)
 	{
 		if (keycmp(tmp->key, arg) == 0)
@@ -66,16 +67,11 @@ static int	update_if_repeated(t_env *export, char *arg, int value_start)
 			temp_value = ft_strdup(arg + value_start);
 			if (arg[value_start - 2] == '+')
 			{
-				if (tmp->value)
-					joined = ft_strjoin(tmp->value, temp_value);
-				else
-					joined = ft_strdup(temp_value);
+				joined = ft_export_normi(joined, tmp, temp_value);
 				free(temp_value);
 				temp_value = joined;
 			}
-			free(tmp->value);
-			tmp->value = temp_value;
-			return (1);
+			return (free(tmp->value), tmp->value = temp_value, 1);
 		}
 		tmp = tmp->next;
 	}

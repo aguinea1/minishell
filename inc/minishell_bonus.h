@@ -6,7 +6,7 @@
 /*   By: aguinea <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 10:58:55 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/23 21:24:16 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:23:54 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int			dup_last_child(t_redirection *redir, t_shell *shell);
 int			dup_n_child(t_redirection *redir, t_shell *shell);
 int			search_heredoc(t_redirection *redir);
 void		make_unlink(t_command *cmd, t_shell *shell);
+char		*ft_export_normi(char *joined, t_env *tmp, char *temp_value);
+int			update_if_repeated(t_env *export, char *arg, int value_start);
 
 //builtins
 
@@ -91,11 +93,12 @@ void		ft_bubble(t_env *export);
 void		ft_swap_lst(t_env *a, t_env *b);
 int			should_skip_creation(char *arg, int value_start, int flag);
 char		*get_export_value(char *arg, int value_start);
-t_env		*init_new_node(char *arg, int value_start, char *temp_value, int flag);
+t_env		*init_new_node(char *arg, int value_start,
+				char *temp_value, int flag);
 void		append_to_list(t_env *export, t_env *new_node);
 int			ft_strncmp_wildcard(const char *filename,
 				const char *pattern, int n);
-char			*handle_wildcard(char *new_input, int *i);
+char		*handle_wildcard(char *new_input, int *i);
 void		skip_quoted_sections(char *input, char *new_input, int *i);
 char		*ft_strchr_wildcard(const char *s, char c);
 

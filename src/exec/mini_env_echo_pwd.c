@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:27:28 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/27 13:58:49 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:18:36 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,17 @@ int	mini_pwd(void)
 	return (0);
 }
 
+static void	ft_print_echo(char **args, int j)
+{
+	while (args[j])
+	{
+		ft_printf("%s", args[j]);
+		if (args[j + 1])
+			ft_printf(" ");
+		j++;
+	}
+}
+
 int	mini_echo(char **args)
 {
 	int	i;
@@ -38,7 +49,7 @@ int	mini_echo(char **args)
 	new_line = 1;
 	if (args[i][0] == '-')
 	{
-		while(args[1][i] && args[1][i] == 'n')
+		while (args[1][i] && args[1][i] == 'n')
 			i++;
 		if (args[1][i] == '\0')
 		{
@@ -46,13 +57,7 @@ int	mini_echo(char **args)
 			j++;
 		}
 	}
-	while (args[j])
-	{
-		ft_printf("%s", args[j]);
-		if (args[j + 1])
-			ft_printf(" ");
-		j++;
-	}
+	ft_print_echo(args, j);
 	if (new_line)
 		ft_printf("\n");
 	return (0);

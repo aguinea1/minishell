@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:54:23 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/16 17:03:06 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:24:42 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ t_env	*init_new_node(char *arg, int value_start, char *temp_value, int flag)
 	new_node->key = export_key(arg, value_start - 1);
 	if (!new_node->key)
 	{
-		if	(flag == 1)
-			err_out("minishell: ", "export: `", arg, "': not a valid identifier");
+		if (flag == 1)
+			err_out("minishell: ", "export: `",
+				arg, "': not a valid identifier");
 		free(new_node);
 		free(temp_value);
 		return (NULL);
@@ -71,4 +72,13 @@ void	append_to_list(t_env *export, t_env *new_node)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new_node;
+}
+
+char	*ft_export_normi(char *joined, t_env *tmp, char *temp_value)
+{
+	if (tmp->value)
+		joined = ft_strjoin(tmp->value, temp_value);
+	else
+		joined = ft_strdup(temp_value);
+	return (joined);
 }

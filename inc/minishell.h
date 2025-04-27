@@ -6,7 +6,7 @@
 /*   By: aguinea <aguinea@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 21:07:16 by aguinea           #+#    #+#             */
-/*   Updated: 2025/04/23 21:27:13 by aguinea          ###   ########.fr       */
+/*   Updated: 2025/04/27 14:24:17 by aguinea          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,8 @@ void		open_heredoc(t_redirection *redir, t_shell *shell,
 char		*check_to_expand(char *line, int *i, t_env *env, int exit_status);
 char		*manage_wildcard(char *input);
 char		*manage_new_input(char *new_input, int j, int *i, char *expanded);
-char	*ft_strchr_wildcard(const char *s, char c);
+char		*ft_strchr_wildcard(const char *s, char c);
+int			update_if_repeated(t_env *export, char *arg, int value_start);
 
 //exec
 
@@ -137,6 +138,7 @@ int			dup_last_child(t_redirection *redir, t_shell *shell);
 int			dup_n_child(t_redirection *redir, t_shell *shell);
 int			search_heredoc(t_redirection *redir);
 void		make_unlink(t_command *cmd, t_shell *shell);
+char		*ft_export_normi(char *joined, t_env *tmp, char *temp_value);
 
 //builtins
 
@@ -157,7 +159,8 @@ void		ft_bubble(t_env *export);
 void		ft_swap_lst(t_env *a, t_env *b);
 int			should_skip_creation(char *arg, int value_start, int flag);
 char		*get_export_value(char *arg, int value_start);
-t_env		*init_new_node(char *arg, int value_start, char *temp_value, int flag);
+t_env		*init_new_node(char *arg, int value_start,
+				char *temp_value, int flag);
 void		append_to_list(t_env *export, t_env *new_node);
 
 //expansor && env
